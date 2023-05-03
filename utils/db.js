@@ -27,8 +27,17 @@ async function connectDb(){
   connection.isConnected = db.connections[0].readyState;
 };
 
+// how to disconnect to db after get what we need
+// after production we prevent trafic to the db so after connect we disconnected
 async function disconnectDb(){
-  
+  if (connection.isConnected) {
+    if (process.env.NODE_END === "production") {
+      await mongoose.disconnect();
+      connection.isConnected = false;
+    } else {
+      console.log("not diconnecting from the database.");
+    }
+  }
 };
 
 
