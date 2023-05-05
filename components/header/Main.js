@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import styles from './styles.module.scss';
+import styles from './header.module.scss';
 import { RiSearch2Fill, RiShoppingCartLine } from 'react-icons/ri';
 
 const Main = () => {

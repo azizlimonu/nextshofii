@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './styles.module.scss';
+import styles from './header.module.scss';
 import { MdSecurity } from "react-icons/md";
 import { BsSuitHeart } from "react-icons/bs";
 import { RiAccountPinCircleLine, RiArrowDropDownFill } from "react-icons/ri";
