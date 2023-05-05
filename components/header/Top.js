@@ -8,7 +8,7 @@ import Image from 'next/image';
 import UserMenu from './UserMenu';
 // import indFlag from '../../public/'
 
-export const Top = () => {
+export const Top = ({ country }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -20,14 +20,14 @@ export const Top = () => {
           <li className={styles.li}>
             <div style={{ borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
               <Image
-                src="/images/Flag_of_Indonesia.svg.webp"
-                alt='indonesian flag'
+                src={country?.flag}
+                alt={country.name}
                 height={40}
                 width={40}
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <span>Indoneisan / IDR</span>
+            <span>{country.name}</span>
           </li>
 
           <li className={styles.li}>

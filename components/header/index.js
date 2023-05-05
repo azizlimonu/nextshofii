@@ -3,11 +3,11 @@ import Ads from './Ad1'
 import { Top } from './Top';
 import Main from './Main';
 
-export const Header = ({ }) => {
+export const Header = ({ country }) => {
   return (
     <header className={styles.header}>
       <Ads />
-      <Top />
+      <Top country={country} />
       <Main />
     </header>
   )

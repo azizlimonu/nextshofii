@@ -6,7 +6,7 @@ import NewsLetter from './NewsLetter';
 import Payment from './Payment';
 import Copyright from './Copyright';
 
-const Footer = () => {
+const Footer = ({ country }) => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__container}>
@@ -14,7 +14,7 @@ const Footer = () => {
         <NewsLetter />
         <Socials />
         <Payment />
-        <Copyright />
+        <Copyright country={country} />
       </div>
     </footer>
   )
