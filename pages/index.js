@@ -9,10 +9,11 @@ import { useSession } from 'next-auth/react';
 export default function Home({ country }) {
   const { data: session } = useSession();
   // console.log(country);
+  console.log(session);
   return (
     <>
       <Header country={country} />
-      {/* {session ? "Logged id" : "Not logged in"} */}
+      {session ? "Logged id" : "Not logged in"}
       <Footer country={country} />
     </>
   )

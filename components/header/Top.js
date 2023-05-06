@@ -6,10 +6,12 @@ import { RiAccountPinCircleLine, RiArrowDropDownFill } from "react-icons/ri";
 import Link from "next/link";
 import Image from 'next/image';
 import UserMenu from './UserMenu';
+import { useSession } from 'next-auth/react';
 // import indFlag from '../../public/'
 
 export const Top = ({ country }) => {
   const [visible, setVisible] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <div className={styles.top}>
@@ -19,13 +21,7 @@ export const Top = ({ country }) => {
         <ul className={styles.top__list}>
           <li className={styles.li}>
             <div style={{ borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
-              <Image
-                src={country?.flag}
-                alt={country.name}
-                height={40}
-                width={40}
-                style={{ objectFit: "cover" }}
-              />
+              <img src={session?.user?.image} alt="" />
             </div>
             <span>{country.name}</span>
           </li>
@@ -55,27 +51,24 @@ export const Top = ({ country }) => {
             onMouseOver={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
           >
-            {/* <li className={styles.li}>
-              <div className={styles.flex}>
-                <RiAccountPinCircleLine />
-                <span>Account</span>
-                <RiArrowDropDownFill />
-              </div>
-            </li> */}
-            {/* if user exist */}
-            <li className={styles.li}>
-              <div className={styles.flex}>
-                <Image
-                  src='/images/profile.png'
-                  alt=''
-                  width={78}
-                  height={78}
-                />
-                <span>Aziz Limonu</span>
-                <RiArrowDropDownFill />
-              </div>
-            </li>
-            {visible && <UserMenu />}
+            {session ? (
+              <li className={styles.li}>
+                <div className={styles.flex}>
+                  <img src={session?.user?.image} alt="" />
+                  <span>{session?.user?.name}</span>
+                  <RiArrowDropDownFill />
+                </div>
+              </li>
+            ) : (
+              <li className={styles.li}>
+                <div className={styles.flex}>
+                  <RiAccountPinCircleLine />
+                  <span>Account</span>
+                  <RiArrowDropDownFill />
+                </div>
+              </li>
+            )}
+            {visible && <UserMenu session={session}/>}
           </li>
 
         </ul>
