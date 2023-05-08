@@ -21,7 +21,7 @@ export const Top = ({ country }) => {
         <ul className={styles.top__list}>
           <li className={styles.li}>
             <div style={{ borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
-              <img src={session?.user?.image} alt="" />
+              <img src={country?.flag} alt="" />
             </div>
             <span>{country.name}</span>
           </li>
@@ -68,7 +68,7 @@ export const Top = ({ country }) => {
                 </div>
               </li>
             )}
-            {visible && <UserMenu session={session}/>}
+            {visible && <UserMenu session={session} />}
           </li>
 
         </ul>

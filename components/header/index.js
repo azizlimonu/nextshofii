@@ -3,7 +3,7 @@ import Ads from './Ad1'
 import { Top } from './Top';
 import Main from './Main';
 
-export const Header = ({ country }) => {
+export default function Header ({ country }) {
   return (
     <header className={styles.header}>
       <Ads />
