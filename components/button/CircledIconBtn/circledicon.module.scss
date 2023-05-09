@@ -1,4 +1,4 @@
-.button{
+.button {
   position: relative;
   border: none;
   outline: none;
@@ -11,7 +11,7 @@
   border-radius: 55px;
   cursor: pointer;
 
-  .svg__wrap{
+  .svg__wrap {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -21,8 +21,7 @@
     top: 7.5px;
     right: 5px;
     background: $grey-color;
-
-    svg{
+    svg {
       fill: $blue-color;
     }
   }

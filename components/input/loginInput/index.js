@@ -9,15 +9,19 @@ const LoginInput = ({ icon, placeholder, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
-    <div className={`${styles.input} ${meta.touched && meta.error ? styles.error : ""}`}>
+    <div
+      className={`${styles.input} ${meta.touched && meta.error ? styles.error : ""
+        }`}
+    >
       {icon == "user" ? (
         <BiUser />
-      ) : icon == 'email' ? (
+      ) : icon == "email" ? (
         <SiMinutemailer />
-      ) : icon == 'password' ?
-        <IoKeyOutline /> :
+      ) : icon == "password" ? (
+        <IoKeyOutline />
+      ) : (
         ""
-      }
+      )}
       <input
         type={field.type}
         name={field.name}
@@ -26,7 +30,7 @@ const LoginInput = ({ icon, placeholder, ...props }) => {
         {...props}
       />
       {meta.touched && meta.error && (
-        <div className={styles.error__popun}>
+        <div className={styles.error__popup}>
           <span></span>
           <ErrorMessage name={field.name} />
         </div>

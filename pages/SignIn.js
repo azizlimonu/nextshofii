@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { Form, Formik } from 'formik';
 import { Router } from "next/router";
-import { signIn } from "next-auth/react";
+import { getCsrfToken, getProviders, getSession, signIn } from "next-auth/react";
 import * as Yup from "yup";
 import LoginInput from "../components/input/loginInput";
 
@@ -158,6 +158,16 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
             </p>
 
             <Formik
+              enableReinitialize
+              initialValues={{
+                login_email,
+                login_password,
+              }}
+              validationSchema={loginValidation}
+              onSubmit={() => {
+                // signInHandler();
+                console.log("Sign In", user);
+              }}
             >
               {(form) => (
                 <Form method="post" action="/api/auth/signin/email">
@@ -235,7 +245,8 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
                 }}
                 validationSchema={registerValidation}
                 onSubmit={() => {
-                  signUpHandler();
+                  // signUpHandler();
+                  console.log("Sign Up", user);
                 }}
               >
                 {(form) => (
@@ -286,4 +297,28 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
   )
 }
 
-export default Signin
+export async function getServerSideProps(context) {
+  const { req, query } = context;
+
+  const session = await getSession({ req });
+  // const { callbackUrl } = query;
+
+  // if (session) {
+  //   return {
+  //     redirect: {
+  //       destination: callbackUrl,
+  //     },
+  //   };
+  // }
+  const csrfToken = await getCsrfToken(context);
+  const providers = Object.values(await getProviders());
+  return {
+    props: {
+      providers,
+      csrfToken,
+      // callbackUrl,
+    },
+  };
+}
+
+export default Signin;
