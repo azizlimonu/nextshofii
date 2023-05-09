@@ -3,6 +3,11 @@
   min-height: 100vh;
   overflow: hidden;
   justify-content: center;
+  display: flex;
+
+  .active {
+    right: 100%;
+  }
 
   @media (max-width: 800px) {
     flex-direction: column;
@@ -49,7 +54,7 @@
     span {
       font-weight: 600;
       font-size: 14px;
-      //padding-left: 10px;
+      padding-left: 10px;
       a {
         color: $blue-color;
         cursor: pointer;
@@ -119,8 +124,8 @@
     }
   }
 }
-.social__btn{
-    border: none;
+.social__btn {
+  border: none;
   outline: none;
   width: 290px;
   height: 50px;

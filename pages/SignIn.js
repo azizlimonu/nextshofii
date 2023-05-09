@@ -1,8 +1,8 @@
-import { useState } from "react";
 import Header from '../components/header';
 import Footer from '../components/footer';
 import styles from '../styles/signin.module.scss';
 import CircledIconBtn from "../components/button/CircledIconBtn";
+import LoginInput from "../components/input/loginInput";
 
 import Link from "next/link";
 import Image from 'next/image';
@@ -11,10 +11,12 @@ import { Form, Formik } from 'formik';
 import { Router } from "next/router";
 import { getCsrfToken, getProviders, getSession, signIn } from "next-auth/react";
 import * as Yup from "yup";
-import LoginInput from "../components/input/loginInput";
+import { useState } from 'react';
 
 
 const Signin = ({ providers, callbackUrl, csrfToken }) => {
+
+
   const initialvalues = {
     login_email: "",
     login_password: "",
@@ -227,69 +229,68 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Login Form */}
-          <div className={styles.login__container}>
-            <div className={styles.login__form}>
-              <h1>Sign up</h1>
-              <p>
-                Get access to one of the best Eshopping services in the world.
-              </p>
-              <Formik
-                enableReinitialize
-                initialValues={{
-                  name,
-                  email,
-                  password,
-                  conf_password,
-                }}
-                validationSchema={registerValidation}
-                onSubmit={() => {
-                  // signUpHandler();
-                  console.log("Sign Up", user);
-                }}
-              >
-                {(form) => (
-                  <Form>
-                    <LoginInput
-                      type="text"
-                      name="name"
-                      icon="user"
-                      placeholder="Full Name"
-                      onChange={handleChange}
-                    />
-                    <LoginInput
-                      type="text"
-                      name="email"
-                      icon="email"
-                      placeholder="Email Address"
-                      onChange={handleChange}
-                    />
-                    <LoginInput
-                      type="password"
-                      name="password"
-                      icon="password"
-                      placeholder="Password"
-                      onChange={handleChange}
-                    />
-                    <LoginInput
-                      type="password"
-                      name="conf_password"
-                      icon="password"
-                      placeholder="Re-Type Password"
-                      onChange={handleChange}
-                    />
-                    <CircledIconBtn type="submit" text="Sign up" />
-                  </Form>
-                )}
-              </Formik>
-              <div>
-                {success && <span className={styles.success}>{success}</span>}
-              </div>
-              <div>{error && <span className={styles.error}>{error}</span>}</div>
+        {/* SignUp Form */}
+        <div className={`${styles.login__container} ${styles.login__containeractive}`}>
+          <div className={styles.login__form}>
+            <h1>Sign up</h1>
+            <p>
+              Get access to one of the best Eshopping services in the world.
+            </p>
+            <Formik
+              enableReinitialize
+              initialValues={{
+                name,
+                email,
+                password,
+                conf_password,
+              }}
+              validationSchema={registerValidation}
+              onSubmit={() => {
+                // signUpHandler();
+                console.log("Sign Up", user);
+              }}
+            >
+              {(form) => (
+                <Form>
+                  <LoginInput
+                    type="text"
+                    name="name"
+                    icon="user"
+                    placeholder="Full Name"
+                    onChange={handleChange}
+                  />
+                  <LoginInput
+                    type="text"
+                    name="email"
+                    icon="email"
+                    placeholder="Email Address"
+                    onChange={handleChange}
+                  />
+                  <LoginInput
+                    type="password"
+                    name="password"
+                    icon="password"
+                    placeholder="Password"
+                    onChange={handleChange}
+                  />
+                  <LoginInput
+                    type="password"
+                    name="conf_password"
+                    icon="password"
+                    placeholder="Re-Type Password"
+                    onChange={handleChange}
+                  />
+                  <CircledIconBtn type="submit" text="Sign up" />
+                </Form>
+              )}
+            </Formik>
+            <div>
+              {success && <span className={styles.success}>{success}</span>}
             </div>
+            <div>{error && <span className={styles.error}>{error}</span>}</div>
           </div>
-
         </div>
       </div>
       <Footer country="Indonesia" />
