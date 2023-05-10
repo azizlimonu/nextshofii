@@ -8,10 +8,17 @@ import Link from "next/link";
 import Image from 'next/image';
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { Form, Formik } from 'formik';
-import { Router } from "next/router";
-import { getCsrfToken, getProviders, getSession, signIn } from "next-auth/react";
+import Router from "next/router";
+import {
+  getProviders,
+  getSession,
+  signIn,
+  country,
+} from "next-auth/react";
 import * as Yup from "yup";
+import axios from 'axios';
 import { useState } from 'react';
+import { DotLoaders } from '../components/loaders/DotLoaders';
 
 
 const Signin = ({ providers, callbackUrl, csrfToken }) => {
@@ -31,7 +38,6 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialvalues);
-  // destructure user object
   const {
     login_email,
     login_password,
@@ -43,8 +49,6 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
     error,
     login_error,
   } = user;
-
-  console.log(user);
 
   const country = {
     name: "Indonesia",
@@ -140,6 +144,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
 
   return (
     <>
+      {loading && <DotLoaders loading={loading} />}
       <Header country={country} />
       <div className={styles.login}>
         <div className={styles.login__container}>
@@ -167,8 +172,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
               }}
               validationSchema={loginValidation}
               onSubmit={() => {
-                // signInHandler();
-                console.log("Sign In", user);
+                signInHandler();
               }}
             >
               {(form) => (
@@ -176,7 +180,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
                   <input
                     type="hidden"
                     name="csrfToken"
-                    defaultValue={csrfToken}
+                    // defaultValue={csrfToken}
                   />
                   <LoginInput
                     type="text"
@@ -248,8 +252,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
               }}
               validationSchema={registerValidation}
               onSubmit={() => {
-                // signUpHandler();
-                console.log("Sign Up", user);
+                signUpHandler();
               }}
             >
               {(form) => (
@@ -301,7 +304,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
 export async function getServerSideProps(context) {
   const { req, query } = context;
 
-  const session = await getSession({ req });
+  // const session = await getSession({ req });
   // const { callbackUrl } = query;
 
   // if (session) {
@@ -311,13 +314,11 @@ export async function getServerSideProps(context) {
   //     },
   //   };
   // }
-  const csrfToken = await getCsrfToken(context);
+  // const csrfToken = await getCsrfToken(context);
   const providers = Object.values(await getProviders());
   return {
     props: {
       providers,
-      csrfToken,
-      // callbackUrl,
     },
   };
 }
