@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './header.module.scss';
 import { MdSecurity } from "react-icons/md";
 import { BsSuitHeart } from "react-icons/bs";
-import { RiAccountPinCircleLine, RiArrowDropDownFill } from "react-icons/ri";
+import { RiAccountCircleFill, RiArrowDropDownFill } from "react-icons/ri";
 import Link from "next/link";
 import Image from 'next/image';
 import UserMenu from './UserMenu';
@@ -62,7 +62,7 @@ export const Top = ({ country }) => {
             ) : (
               <li className={styles.li}>
                 <div className={styles.flex}>
-                  <RiAccountPinCircleLine />
+                  <RiAccountCircleFill />
                   <span>Account</span>
                   <RiArrowDropDownFill />
                 </div>

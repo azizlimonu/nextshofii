@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-const { ObjectId } = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
@@ -23,8 +22,8 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      // default:
-      //   "https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642478/992490_b0iqzq.png",
+      default:
+        "https://res.cloudinary.com/dmhcnhtng/image/upload/v1664642478/992490_b0iqzq.png",
     },
     emailVerified: {
       type: Boolean,
@@ -69,17 +68,6 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    // wishlist: [
-    //   {
-    //     product: {
-    //       type: ObjectId,
-    //       ref: "Product",
-    //     },
-    //     style: {
-    //       type: String,
-    //     },
-    //   },
-    // ],
   },
   {
     timestamps: true,

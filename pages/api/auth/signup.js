@@ -10,7 +10,6 @@ import { activateEmailTemplate } from "../../../utils/activateEmailTemplate";
 
 const handler = nc();
 
-
 handler.post(async (req, res) => {
   try {
     // connect db
@@ -52,10 +51,10 @@ handler.post(async (req, res) => {
     console.log(activate_token);
 
     const url = `${process.env.BASE_URL}/activate/${activate_token}`;
-    sendEmail(email,url,"","Activate Your Account.", activateEmailTemplate);
+    sendEmail(email, url, "", "Activate Your Account.", activateEmailTemplate);
 
     await db.disconnectDb();
-    res.status(200).json({ message: "User Created, activate your email to start" });
+    res.status(200).json(addedUser).json({ message: "User Created, activate your email to start" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

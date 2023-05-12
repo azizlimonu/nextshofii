@@ -34,7 +34,7 @@ export default NextAuth({
         if (user) {
           return SignInUser({ password, user });
         } else {
-          throw new Error("This email does not exist.");
+          throw new Error("This email does not registered.");
         }
       },
     }),
@@ -57,6 +57,7 @@ export default NextAuth({
       let user = await User.findById(token.sub);
       session.user.id = token.sub || user._id.toSting();
       session.user.role = user.role || "user";
+      session.user.image = user.image;
       token.role = user.role || "user";
       return session;
     },
