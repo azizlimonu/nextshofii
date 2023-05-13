@@ -19,7 +19,7 @@ import {
 import * as Yup from "yup";
 import axios from 'axios';
 import { useState } from 'react';
-import { DotLoaders } from '../components/loaders/DotLoaders';
+import DotLoaders from '../components/loaders/DotLoaders';
 
 
 const Signin = ({ providers, callbackUrl, csrfToken }) => {

@@ -13,4 +13,4 @@ const CircledIconBtn = ({ type, text }) => {
   )
 }
 
-export default CircledIconBtn
+export default CircledIconBtn;
