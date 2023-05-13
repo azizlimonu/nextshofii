@@ -6,8 +6,8 @@ import { useSession } from 'next-auth/react';
 export default function Home({ country }) {
   const { data: session } = useSession();
   // console.log(country);
-  // console.log(session);
-  // console.log(session?.user?.image);
+  console.log(session);
+  console.log(session?.user?.image);
   return (
     <>
       <Header country={country} />

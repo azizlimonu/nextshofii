@@ -14,6 +14,7 @@ import {
   getSession,
   signIn,
   country,
+  getCsrfToken,
 } from "next-auth/react";
 import * as Yup from "yup";
 import axios from 'axios';
@@ -132,7 +133,12 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
           password: password,
         };
         const res = await signIn("credentials", options);
-        Router.push("/");
+        if (res?.error) {
+          setLoading(false);
+          setUser({ ...user, login_error: res?.error });
+        } else {
+          return Router.push(callbackUrl || "/");
+        }
 
       }, [2000]);
     } catch (error) {
@@ -180,7 +186,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
                   <input
                     type="hidden"
                     name="csrfToken"
-                    // defaultValue={csrfToken}
+                    defaultValue={csrfToken}
                   />
                   <LoginInput
                     type="text"
@@ -304,21 +310,23 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
 export async function getServerSideProps(context) {
   const { req, query } = context;
 
-  // const session = await getSession({ req });
-  // const { callbackUrl } = query;
+  const session = await getSession({ req });
+  const { callbackUrl } = query;
 
-  // if (session) {
-  //   return {
-  //     redirect: {
-  //       destination: callbackUrl,
-  //     },
-  //   };
-  // }
-  // const csrfToken = await getCsrfToken(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: callbackUrl,
+      },
+    };
+  }
+  const csrfToken = await getCsrfToken(context);
   const providers = Object.values(await getProviders());
   return {
     props: {
       providers,
+      csrfToken,
+      callbackUrl
     },
   };
 }
