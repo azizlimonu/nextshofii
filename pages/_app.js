@@ -6,6 +6,7 @@ import Head from "next/head";
 import store from '../store';
 
 import { SessionProvider } from "next-auth/react";
+import Layout from '../components/layout/Layout';
 
 let persistor = persistStore(store);
 
@@ -25,7 +26,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <SessionProvider session={session}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </PersistGate>
         </Provider>
       </SessionProvider>

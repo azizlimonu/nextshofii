@@ -1,34 +1,18 @@
-import  Header  from '../components/header';
-import Footer from '../components/footer';
-import axios from 'axios';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 
 export default function Home({ country }) {
   const { data: session } = useSession();
-  // console.log(country);
-  console.log(session);
-  console.log(session?.user?.image);
   return (
     <>
-      <Header country={country} />
-      {session ? "Logged id" : "Not logged in"}
-      <Footer country={country} />
+      <Head>
+        <title>Shoppay | Home</title>
+        <meta name="keywords" content="Shoppay Ecommerce - Belanja Online" />
+      </Head>
+      <div>
+       {session ? "Logged in" : "Not Logged in"}
+      </div>
     </>
   )
 }
 
-export async function getServerSideProps() {
-  let data = await axios
-    .get(`https://api.ipregistry.co/?key=${process.env.COUNTRY_API_KEY}`)
-    .then((res) => {
-      return res.data.location.country;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  return {
-    props: {
-      country: { name: data.name, flag: data.flag.emojitwo },
-    },
-  };
-}

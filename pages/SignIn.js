@@ -1,5 +1,3 @@
-import Header from '../components/header';
-import Footer from '../components/footer';
 import styles from '../styles/signin.module.scss';
 import CircledIconBtn from "../components/button/CircledIconBtn";
 import LoginInput from "../components/input/loginInput";
@@ -13,7 +11,6 @@ import {
   getProviders,
   getSession,
   signIn,
-  country,
   getCsrfToken,
 } from "next-auth/react";
 import * as Yup from "yup";
@@ -50,11 +47,6 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
     error,
     login_error,
   } = user;
-
-  const country = {
-    name: "Indonesia",
-    flag: "https://cdn.ipregistry.co/flags/emojitwo/id.svg"
-  };
 
   // Handle Change
   const handleChange = (e) => {
@@ -151,7 +143,6 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
   return (
     <>
       {loading && <DotLoaders loading={loading} />}
-      <Header country={country} />
       <div className={styles.login}>
         <div className={styles.login__container}>
           <div className={styles.login__header}>
@@ -302,7 +293,6 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
           </div>
         </div>
       </div>
-      <Footer country="Indonesia" />
     </>
   )
 }

@@ -23,7 +23,7 @@ export const Top = ({ country }) => {
             <div style={{ borderRadius: '50%', overflow: 'hidden', position: 'relative' }}>
               <img src={country?.flag} alt="" />
             </div>
-            <span>{country.name}</span>
+            <span>{country?.name}</span>
           </li>
 
           <li className={styles.li}>

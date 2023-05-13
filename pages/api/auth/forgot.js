@@ -2,7 +2,7 @@ import nc from "next-connect";
 import db from "../../../utils/db";
 
 import User from "../../../models/UserModel";
-import { createActivationToken, createResetToken } from "../../../utils/tokens";
+import { createResetToken } from "../../../utils/tokens";
 import { sendEmail } from "../../../utils/sendEmail";
 import { resetEmailTemplate } from "../../../utils/resetEmailTemplate";
 

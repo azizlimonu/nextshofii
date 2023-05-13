@@ -1,6 +1,4 @@
 import styles from '../../styles/forgot.module.scss';
-import Header from '../../components/header';
-import Footer from '../../components/footer';
 import DotLoaders from '../../components/loaders/DotLoaders';
 import CircledIconBtn from '../../components/button/CircledIconBtn';
 import LoginInput from '../../components/input/loginInput';
@@ -47,7 +45,6 @@ const Forgot = () => {
   return (
     <>
       {loading && <DotLoaders loading={loading} />}
-      <Header country="" />
       <div className={styles.forgot}>
         <div>
           <div className={styles.forgot__header}>
@@ -88,7 +85,6 @@ const Forgot = () => {
           </Formik>
         </div>
       </div>
-      <Footer country="" />
     </>
   )
 }
