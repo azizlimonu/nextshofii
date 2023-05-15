@@ -72,6 +72,8 @@ export default NextAuth({
   secret: process.env.JWT_SECRET,
 });
 
+db.disconnectDb();
+
 const SignInUser = async ({ password, user }) => {
   if (!user.password) {
     throw new Error("Please enter your password.");
