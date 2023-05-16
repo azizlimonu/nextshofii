@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.scss';
 import Main from '../components/home/main/Main';
+import FlashDeals from '../components/home/flashdeals/FlashDeals';
 
 export default function Home({ country }) {
   return (
@@ -13,7 +14,7 @@ export default function Home({ country }) {
       <div className={styles.home}>
         <div className={styles.container}>
           <Main />
-          {/* flash deals */}
+          <FlashDeals />
 
           <div className={styles.home__category}>
             {/* category */}
