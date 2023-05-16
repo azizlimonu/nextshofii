@@ -7,13 +7,31 @@ const Header = () => {
     <div className={styles.header}>
       <ul>
         <li>
-          <Link href="/">Store</Link>
+          <Link href="/">Trending</Link>
         </li>
         <li>
           <Link href="/">Electronics</Link>
         </li>
         <li>
           <Link href="/">Watches</Link>
+        </li>
+        <li>
+          <Link href="/">Fashion</Link>
+        </li>
+        <li>
+          <Link href="/">Shoes</Link>
+        </li>
+        <li>
+          <Link href="/">Smarthphone</Link>
+        </li>
+        <li>
+          <Link href="/">Accesories</Link>
+        </li>
+        <li>
+          <Link href="/">Make up</Link>
+        </li>
+        <li>
+          <Link href="/">Furniture</Link>
         </li>
       </ul>
     </div>
