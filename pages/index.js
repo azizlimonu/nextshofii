@@ -13,8 +13,13 @@ import {
   homeImprovSwiper
 } from '../data/Home';
 import ProductSwiper from '../components/productswiper';
+import db from '../utils/db';
+import Product from '../models/ProductModel';
+import ProductCard from '../components/productCard';
 
-export default function Home({ country }) {
+export default function Home({ products }) {
+  console.log(products);
+
   const isMedium = useMediaQuery({ query: "(max-width:850px)" });
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });
 
@@ -77,8 +82,13 @@ export default function Home({ country }) {
             header="Women"
           />
 
-          <div className={styles.product}>
-            {/* product card */}
+          <div className={styles.products}>
+            {products?.map((item) => (
+              <ProductCard
+                product={item}
+                key={item._id}
+              />
+            ))}
           </div>
         </div>
 
@@ -88,6 +98,13 @@ export default function Home({ country }) {
   )
 }
 
-// export async function getServerSideProps() {
-
-// }
+export async function getServerSideProps() {
+  db.connectDb();
+  let products = await Product.find().sort({ createdAt: -1 }).lean();
+  db.disconnectDb();
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products))
+    }
+  }
+}

@@ -72,7 +72,7 @@ export default NextAuth({
   secret: process.env.JWT_SECRET,
 });
 
-db.disconnectDb();
+// db.disconnectDb();
 
 const SignInUser = async ({ password, user }) => {
   if (!user.password) {
