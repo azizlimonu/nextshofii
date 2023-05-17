@@ -66,6 +66,16 @@ export default function Home({ country }) {
             background="#3c811f"
             header="Women"
           />
+          <ProductSwiper
+            products={gamingSwiper}
+            background="#3c811f"
+            header="Women"
+          />
+          <ProductSwiper
+            products={homeImprovSwiper}
+            background="#3c811f"
+            header="Women"
+          />
 
           <div className={styles.product}>
             {/* product card */}
