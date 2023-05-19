@@ -36,7 +36,7 @@ async function disconnectDb(){
       connection.isConnected = false;
       console.log("Disconnect from db");
     } else {
-      console.log("not diconnecting from the database.");
+      console.log("Disconnect triggered but in dev Mode");
     }
   }
 };

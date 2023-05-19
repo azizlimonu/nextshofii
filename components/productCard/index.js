@@ -42,7 +42,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className={styles.product}>
       <div className={styles.product__container}>
-        <Link href={`/product/${product.slug}`}>
+        <Link href={`/product/${product.slug}?style=${active}`}>
           <ProductSwiper images={images} />
         </Link>
 
@@ -83,7 +83,7 @@ const ProductCard = ({ product }) => {
             ) : (
               <span
                 key={i}
-                style={{ backgroundColor: `${style.color}` }}
+                style={{ backgroundColor: `${item.color}` }}
                 onMouseOver={() => {
                   setImages(product.subProducts[i].images);
                   setActive(i);
