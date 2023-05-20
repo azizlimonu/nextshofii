@@ -12,10 +12,10 @@ const Main = () => {
       <div className={styles.main__container}>
         <Link href='/' className={styles.logo}>
           <Image
-            src='/logo.png'
+            src='/logo3.png'
             alt='logo'
-            width={170}
-            height={100}
+            width={300}
+            height={300}
           />
         </Link>
 

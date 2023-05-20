@@ -5,13 +5,16 @@ import SubCategory from '../../models/SubCategoryModel';
 
 import styles from '../../styles/product.module.scss';
 
-import ProductInfo from "../../components/productPage/ProductInfo";
-import Reviews from "../../components/productPage/Reviews";
-import ProductSwiper from '../../components/productPage/ProductSwiper';
+import ProductInfo from "../../components/productPage/productInfo";
+import Reviews from "../../components/productPage/review";
+import ProductSwiper from '../../components/productPage/productSwiper';
 
 import Head from "next/head";
+import { useState } from "react";
 
 export default function ProductPage({ product }) {
+  const [activeImage, setActiveImage] = useState("");
+
   console.log(product);
   return (
     <>
@@ -30,8 +33,8 @@ export default function ProductPage({ product }) {
           </div>
 
           <div className={styles.product__main}>
-            <ProductSwiper />
-            <ProductInfo />
+            <ProductSwiper images={product.images} activeImage={activeImage} />
+            <ProductInfo product={product} activeImage={activeImage} />
           </div>
 
           <Reviews />
