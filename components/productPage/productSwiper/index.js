@@ -4,7 +4,7 @@ import { useState } from 'react';
 import ReactImageMagnify from 'react-image-magnify';
 
 const ProductSwiper = ({ images, activeImage }) => {
-  console.log(images, activeImage);
+  // console.log(images, activeImage);
 
   const [active, setActive] = useState(0);
 

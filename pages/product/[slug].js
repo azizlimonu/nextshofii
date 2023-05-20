@@ -15,7 +15,7 @@ import { useState } from "react";
 export default function ProductPage({ product }) {
   const [activeImage, setActiveImage] = useState("");
 
-  console.log(product);
+  // console.log(product);
   return (
     <>
       <Head>
@@ -34,7 +34,7 @@ export default function ProductPage({ product }) {
 
           <div className={styles.product__main}>
             <ProductSwiper images={product.images} activeImage={activeImage} />
-            <ProductInfo product={product} activeImage={activeImage} />
+            <ProductInfo product={product} setActiveImage={setActiveImage} />
           </div>
 
           <Reviews />
@@ -92,6 +92,7 @@ export async function getServerSideProps(context) {
       ).toFixed(2)
       : subProduct.sizes[size].price,
     priceBefore: subProduct.sizes[size].price,
+    quantity: subProduct.sizes[size].qty
   };
 
   // console.log("New Product", newProduct);

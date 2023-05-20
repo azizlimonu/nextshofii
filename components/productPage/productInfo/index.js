@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './productInfo.module.scss';
 import { Rating } from '@mui/material';
 import { useRouter } from 'next/router';
@@ -12,6 +12,21 @@ const ProductInfo = ({ product, setActiveImage }) => {
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // change style reset the qty
+  useEffect(() => {
+    setSize("");
+    setQty(1);
+  }, [router.query.style]);
+
+  // change size if the qty is over than product qty
+  useEffect(() => {
+    if (qty > product.quantity) {
+      setQty(product.quantity);
+    }
+  }, [product.quantity, qty, router.query.size]);
+
+  console.log("product detail : ",product);
 
   return (
     <div className={styles.infos}>
@@ -36,8 +51,15 @@ const ProductInfo = ({ product, setActiveImage }) => {
         <div className={styles.infos__price}>
           {
             size
-              ? <h1>{product.price}</h1>
-              : <h2>{product.priceRange}</h2>
+              ? <h1> ${" "}{product.price} </h1>
+              : (
+                <div
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <h1>${" "}{product.price}</h1>
+                  <h2>{product.priceRange}</h2>
+                </div>
+              )
           }
 
           {product.discount > 0 ? (
@@ -59,7 +81,8 @@ const ProductInfo = ({ product, setActiveImage }) => {
         <span>
           {size
             ? product.quantity
-            : product.sizes.reduce((start, next) => start + next.qty, 0)} {" "}
+            : product.sizes.reduce((start, next) => start + next.qty, 0)
+          } {" "}
           Quantity Available
         </span>
 
@@ -73,7 +96,9 @@ const ProductInfo = ({ product, setActiveImage }) => {
                 href={`/product/${product.slug}?style=${router.query.style}&size=${i}`}
               >
                 <div
-                  className={`${styles.infos__sizes_size} ${i == router.query.size && styles.active_size
+                  className={`
+                  ${styles.infos__sizes_size} 
+                  ${i == router.query.size && styles.active_size
                     }`}
                   onClick={() => setSize(size.size)}
                 >
@@ -93,6 +118,10 @@ const ProductInfo = ({ product, setActiveImage }) => {
                   ? styles.active_color
                   : ""
               }
+              onMouseOver={() =>
+                setActiveImage(product.subProducts[i].images[0].url)
+              }
+              onMouseLeave={() => setActiveImage("")}
             >
               <Link href={`/product/${product.slug}?style=${i}`}>
                 <img src={color.image} alt="" />
@@ -102,11 +131,17 @@ const ProductInfo = ({ product, setActiveImage }) => {
         </div>
 
         <div className={styles.infos__qty}>
-          <button onClick={() => console.log("Ok - ")}>
+          <button
+            onClick={() => qty > 1 && setQty((prev) => prev - 1)}
+          >
             <TbMinus />
           </button>
+
           <span>{qty}</span>
-          <button onClick={() => console.log("Ok + ")}>
+
+          <button
+            onClick={() => qty < product.quantity && setQty((prev) => prev + 1)}
+          >
             <TbPlus />
           </button>
         </div>
@@ -119,7 +154,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
 
           <button onClick={() => console.log("Add To Wishlist")}>
             <BsHeart />
-            WISHLIST
+            ADD TO WISHLIST
           </button>
         </div>
 
