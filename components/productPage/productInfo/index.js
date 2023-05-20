@@ -5,6 +5,9 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { TbPlus, TbMinus } from "react-icons/tb";
 import { BsHandbagFill, BsHeart } from "react-icons/bs";
+import Share from './share';
+import Accordian from './Accordian';
+import RelatedProduct from './RelatedProduct';
 
 const ProductInfo = ({ product, setActiveImage }) => {
   const router = useRouter();
@@ -26,7 +29,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
     }
   }, [product.quantity, qty, router.query.size]);
 
-  console.log("product detail : ",product);
+  console.log("product detail : ", product);
 
   return (
     <div className={styles.infos}>
@@ -38,7 +41,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
           <Rating
             name="half-rating-read"
             defaultValue={product.rating}
-            precision={0.5}
+            precision={1}
             readOnly
             style={{ color: "#FACF19" }}
           />
@@ -52,14 +55,8 @@ const ProductInfo = ({ product, setActiveImage }) => {
           {
             size
               ? <h1> ${" "}{product.price} </h1>
-              : (
-                <div
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <h1>${" "}{product.price}</h1>
-                  <h2>{product.priceRange}</h2>
-                </div>
-              )
+              : <h2>{product.priceRange}</h2>
+
           }
 
           {product.discount > 0 ? (
@@ -160,9 +157,12 @@ const ProductInfo = ({ product, setActiveImage }) => {
 
         {error && <span className={styles.error}>{error}</span>}
         {success && <span className={styles.success}>{success}</span>}
-        {/* share link */}
-        {/* Accordian */}
-        {/* Related Product Swiper */}
+
+        <Share />
+        <Accordian
+          details={[product.description, ...product.details]}
+        />
+        <RelatedProduct />
       </div>
     </div>
   )

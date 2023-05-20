@@ -37,7 +37,7 @@ export default function ProductPage({ product }) {
             <ProductInfo product={product} setActiveImage={setActiveImage} />
           </div>
 
-          <Reviews />
+          <Reviews product={product} />
 
           {/* Related Product */}
         </div>
@@ -72,7 +72,6 @@ export async function getServerSideProps(context) {
     });
 
 
-
   let newProduct = {
     ...product,
     // style,
@@ -92,8 +91,53 @@ export async function getServerSideProps(context) {
       ).toFixed(2)
       : subProduct.sizes[size].price,
     priceBefore: subProduct.sizes[size].price,
-    quantity: subProduct.sizes[size].qty
+    quantity: subProduct.sizes[size].qty,
+    ratings: [
+      {
+        percentage: calculatePercentage("5"),
+      },
+      {
+        percentage: calculatePercentage("4"),
+      },
+      {
+        percentage: calculatePercentage("3"),
+      },
+      {
+        percentage: calculatePercentage("2"),
+      },
+      {
+        percentage: calculatePercentage("1"),
+      },
+    ],
+    reviews: product.reviews.reverse(),
+    allSizes: product.subProducts
+      .map((p) => {
+        return p.sizes;
+      })
+      .flat()
+      .sort((a, b) => {
+        return a.size - b.size;
+      })
+      .filter(
+        (element, index, array) =>
+          array.findIndex((el2) => el2.size === element.size) === index
+      ),
   };
+
+  // -------------- //
+  function calculatePercentage(num) {
+    return (
+      (product.reviews.reduce((a, review) => {
+        return (
+          a +
+          (review.rating == Number(num) || review.rating == Number(num) + 0.5)
+        );
+      }, 0) *
+        100) /
+      product.reviews.length
+    ).toFixed(1);
+  }
+  // -------------- //
 
   // console.log("New Product", newProduct);
   // console.log("style", style);

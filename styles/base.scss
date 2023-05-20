@@ -57,8 +57,14 @@ $cubic-bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   padding: 10px;
   color: $success-color;
 }
-
-// Swiper
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #aeaeafa1;
+  border-radius: 5px;
+}
+//-------------Swipers------
 .swiper {
   width: 100%;
   height: 100%;
@@ -143,7 +149,13 @@ $cubic-bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     right: -13px;
   }
 }
-
+.mainSwiper {
+  .swiper-slide {
+    img {
+      // object-fit: contain;
+    }
+  }
+}
 .offers_swiper {
   max-width: 700px;
   transform: translateX(35%);
@@ -215,7 +227,6 @@ $cubic-bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   .swiper-slide img {
     position: absolute;
     top: 0;
-    left: 0;
     width: 100%;
     height: 100% !important;
     object-fit: cover !important;
@@ -290,3 +301,6 @@ $cubic-bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
   }
 }
+.adminproduct__swiper {
+}
+//-------------Swipers------
