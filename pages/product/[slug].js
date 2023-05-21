@@ -120,7 +120,7 @@ export async function getServerSideProps(context) {
       })
       .filter(
         (element, index, array) =>
-          array.findIndex((el2) => el2.size === element.size) === index
+          array.findIndex((el) => el.size === element.size) === index
       ),
   };
 

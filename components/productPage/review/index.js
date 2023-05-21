@@ -11,6 +11,8 @@ const Reviews = ({ product }) => {
   const [rating, setRating] = useState("");
   const [reviews, setReviews] = useState(product.reviews);
 
+  // console.log(reviews);
+
   return (
     <div className={styles.reviews}>
       <div className={styles.reviews__container}>
@@ -55,6 +57,7 @@ const Reviews = ({ product }) => {
             ))}
           </div>
         </div>
+
         {session ? (
           <AddReview product={product} setReviews={setReviews} />
         ) : (
@@ -62,6 +65,7 @@ const Reviews = ({ product }) => {
             Login to add review
           </button>
         )}
+
         <Table
           reviews={reviews}
           allSizes={product.allSizes}
