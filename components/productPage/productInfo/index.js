@@ -10,7 +10,8 @@ import Link from 'next/link';
 import { TbPlus, TbMinus } from "react-icons/tb";
 import { BsHandbagFill, BsHeart } from "react-icons/bs";
 import axios from 'axios';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart, updateCart } from '../../../store/cartSlice';
 
 const ProductInfo = ({ product, setActiveImage }) => {
   const router = useRouter();
@@ -18,6 +19,9 @@ const ProductInfo = ({ product, setActiveImage }) => {
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const { cart } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
 
   // change style reset the qty
   useEffect(() => {
@@ -34,6 +38,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
 
   // console.log("product detail : ", product);
 
+  // ========================== >
   const addToCartHandler = async () => {
     if (!router.query.size) {
       setError("Please Select a size");
@@ -42,9 +47,39 @@ const ProductInfo = ({ product, setActiveImage }) => {
     const { data } = await axios.get(
       `/api/product/${product._id}?style=${product.style}&size=${router.query.size}`
     );
-    console.log("data =>", data);
-
+    // console.log("data =>", data);
+    if (qty > data.quantity) {
+      setError(
+        "The Quantity you have choosed is more than in stock. Try and lower the Qty"
+      );
+    } else if (data.quantity < 1) {
+      setError("This Product is out of stock.");
+      return;
+    } else {
+      // create some unique id for the product with the same style and size to prevent duplicate
+      let _uid = `${data._id}_${product.style}_${router.query.size}`;
+      let exist = cart.cartItems.find((p) => p._uid === _uid);
+      if (exist) {
+        let newCart = cart.cartItems.map((product) => {
+          if (product._uid == exist._uid) {
+            return {
+              ...product, qty: qty
+            };
+          }
+          return product;
+        });
+        dispatch(updateCart(newCart));
+      } else {
+        dispatch(addToCart({
+          ...data,
+          qty,
+          size: data.size,
+          _uid
+        }))
+      }
+    }
   }
+  // ========================== >
 
   return (
     <div className={styles.infos}>

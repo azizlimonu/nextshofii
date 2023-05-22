@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/cart.module.scss';
 import HeaderCart from '../components/cart/header/HeaderCart';
 import CartHeader from '../components/cart/cartHeader/CartHeader';
@@ -7,14 +7,14 @@ import CartCheckout from '../components/cart/checkout/CartCheckout';
 import CartPayment from '../components/cart/payment/CartPayment';
 import CartEmpty from '../components/cart/cartEmpty/CartEmpty';
 
-const cart = () => {
-  const cart = {
-    cartItems: [
-      { name: "", image: "", product: "" },
-      { name: "", image: "", product: "" },
-      { name: "", image: "", product: "" },
-    ]
-  };
+import { useSelector } from 'react-redux';
+import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+
+const Cart = () => {
+  const { cart } = useSelector((state) => ({ ...state }));
+  const [selected, setSelected] = useState([]);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -29,7 +29,14 @@ const cart = () => {
 
             {/* List Cart Product */}
             <div className={styles.cart__products}>
-              <CartProduct />
+              {cart.cartItems.map((product) => (
+                <CartProduct
+                  key={product._uid}
+                  product={product}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              ))}
             </div>
 
             {/* Checkout Section */}
@@ -49,4 +56,4 @@ const cart = () => {
   )
 }
 
-export default cart;
+export default Cart;
