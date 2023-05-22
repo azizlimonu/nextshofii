@@ -2,6 +2,7 @@ import db from "../../utils/db";
 import Product from "../../models/ProductModel";
 import Category from '../../models/CategoryModel';
 import SubCategory from '../../models/SubCategoryModel';
+import User from '../../models/UserModel';
 
 import styles from '../../styles/product.module.scss';
 
@@ -59,6 +60,7 @@ export async function getServerSideProps(context) {
   let product = await Product.findOne({ slug })
     .populate({ path: "category", model: Category })
     .populate({ path: "subCategories", model: SubCategory })
+    .populate({ path: "reviews.reviewBy", model: User })
     .lean();
 
   let subProduct = product?.subProducts[style];
@@ -74,7 +76,7 @@ export async function getServerSideProps(context) {
 
   let newProduct = {
     ...product,
-    // style,
+    style,
     images: subProduct?.images,
     sizes: subProduct?.sizes,
     discount: subProduct?.discount,

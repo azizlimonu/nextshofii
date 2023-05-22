@@ -6,6 +6,7 @@ import usePagination from '../../../hooks/usePagination';
 import Review from './Review';
 
 const Table = ({ reviews, allSizes, colors }) => {
+  // console.log("Reviewsss", reviews);
   const [page, setPage] = useState(1);
   const PER_PAGE = 3
   const count = Math.ceil(reviews.length / PER_PAGE);
@@ -28,7 +29,7 @@ const Table = ({ reviews, allSizes, colors }) => {
 
       <div className={styles.table__data}>
         {_DATA.currentData().map((review, i) => (
-          <Review key={i} reviews={review} />
+          <Review review={review} key={i} />
         ))}
       </div>
 

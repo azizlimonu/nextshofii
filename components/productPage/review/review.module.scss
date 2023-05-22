@@ -125,7 +125,7 @@
     img {
       width: 100px;
       height: 150px;
-      object-fit: cover;
+      object-fit: contain;
     }
     svg {
       position: absolute;
@@ -135,7 +135,7 @@
       width: 30px;
       height: 30px;
       cursor: pointer;
-      fill: #fff;
+      fill: #cb5151;
       display: none;
     }
     &:hover {
