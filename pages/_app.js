@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <>
       <Head>
-        <title>NextShopay</title>
+        <title>Shofii Store</title>
 
         <meta
           name="description"

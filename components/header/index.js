@@ -6,7 +6,7 @@ import Main from './Main';
 export default function Header ({ country }) {
   return (
     <header className={styles.header}>
-      <Ads />
+      {/* <Ads /> */}
       <Top country={country} />
       <Main />
     </header>

@@ -14,8 +14,10 @@ const CartProduct = ({ product, selected, setSelected }) => {
   const [active, setActive] = useState();
 
   useEffect(() => {
+    const check = selected.find((item) => item._uid == product._uid);
+    setActive(check)
 
-  }, []);
+  }, [product._uid, selected]);
 
   const updateQty = (type) => {
     let newCart = cart.cartItems.map((item) => {
@@ -33,10 +35,21 @@ const CartProduct = ({ product, selected, setSelected }) => {
   }
 
   const removeProduct = (id) => {
-
+    let newCart = cart.cartItems.filter((item) => {
+      return item._uid != id;
+    });
+    dispatch(updateCart(newCart));
   }
 
-  const handleSelect = () => { }
+  const handleSelect = () => {
+    // if active than we filter that what we choose 
+    // else we pass the product to the selectArray
+    if (active) {
+      setSelected(selected.filter((p) => p._uid !== product._uid));
+    } else {
+      setSelected([...selected, product]);
+    }
+  };
 
   return (
     <div className={`${styles.card} ${styles.product}`}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../styles/cart.module.scss';
 import HeaderCart from '../components/cart/header/HeaderCart';
 import CartHeader from '../components/cart/cartHeader/CartHeader';
@@ -16,18 +16,39 @@ const Cart = () => {
   const [selected, setSelected] = useState([]);
   const { data: session } = useSession();
 
+  const [shippingFee, setShippingFee] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    setShippingFee(
+      selected.reduce((a, c) => a + Number(c.shipping), 0).toFixed(2)
+    );
+
+    setSubtotal(selected.reduce((a, c) => a + c.price * c.qty, 0).toFixed(2));
+
+    setTotal((
+      selected.reduce((a, c) => a + c.price * c.qty, 0) + Number(shippingFee)
+    ).toFixed(2));
+
+  }, [selected, shippingFee]);
+
+  const saveCartToDbHandler = async () => {
+
+  }
+
   return (
     <>
-      <CartHeader />
-
       <div className={styles.cart}>
 
         {cart.cartItems.length > 0 ? (
           <div className={styles.cart__container}>
-            {/* Cart Header */}
-            <HeaderCart />
+            <HeaderCart
+              cartItems={cart.cartItems}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
-            {/* List Cart Product */}
             <div className={styles.cart__products}>
               {cart.cartItems.map((product) => (
                 <CartProduct
@@ -39,10 +60,14 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Checkout Section */}
-            <CartCheckout />
+            <CartCheckout
+              total={total}
+              subtotal={subtotal}
+              selected={selected}
+              shippingFee={shippingFee}
+              saveCartToDbHandler={saveCartToDbHandler}
+            />
 
-            {/* Payment Section */}
             <CartPayment />
 
           </div>
