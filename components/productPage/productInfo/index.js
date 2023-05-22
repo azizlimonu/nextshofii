@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import styles from './productInfo.module.scss';
+import Share from './share';
+import Accordian from './Accordian';
+import RelatedProduct from './RelatedProduct';
+
+import React, { useEffect, useState } from 'react';
 import { Rating } from '@mui/material';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { TbPlus, TbMinus } from "react-icons/tb";
 import { BsHandbagFill, BsHeart } from "react-icons/bs";
-import Share from './share';
-import Accordian from './Accordian';
-import RelatedProduct from './RelatedProduct';
+import axios from 'axios';
+
 
 const ProductInfo = ({ product, setActiveImage }) => {
   const router = useRouter();
@@ -29,7 +32,19 @@ const ProductInfo = ({ product, setActiveImage }) => {
     }
   }, [product.quantity, qty, router.query.size]);
 
-  console.log("product detail : ", product);
+  // console.log("product detail : ", product);
+
+  const addToCartHandler = async () => {
+    if (!router.query.size) {
+      setError("Please Select a size");
+      return;
+    }
+    const { data } = await axios.get(
+      `/api/product/${product._id}?style=${product.style}&size=${router.query.size}`
+    );
+    console.log("data =>", data);
+
+  }
 
   return (
     <div className={styles.infos}>
@@ -144,7 +159,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
         </div>
 
         <div className={styles.infos__actions}>
-          <button onClick={() => console.log("Add To Cart")}>
+          <button onClick={() => addToCartHandler()}>
             <BsHandbagFill />
             <b>ADD TO CART</b>
           </button>

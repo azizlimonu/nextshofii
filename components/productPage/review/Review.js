@@ -15,8 +15,10 @@ const Review = ({ review }) => {
           <h4>
             {name.slice(0, 1)}***{name.slice(name.length - 1, name.length)}
           </h4>
+          
           <img src={image} alt="" />
         </div>
+
         <div className={styles.review__review}>
           <Rating
             name="half-rating-read"
@@ -25,7 +27,9 @@ const Review = ({ review }) => {
             readOnly
             style={{ color: "#facf19" }}
           />
+
           <p>{review.review}</p>
+
           <p>
             <span>Overall Fit:</span>
             {review.fit}
@@ -43,6 +47,7 @@ const Review = ({ review }) => {
           </p>
         </div>
       </div>
+
       <div className={styles.flex}>
         <div className={styles.review__images}>
           {review.images.length > 0 &&
@@ -50,11 +55,13 @@ const Review = ({ review }) => {
               <img src={img?.url} alt="" key={i} />
             ))}
         </div>
+
         <div className={styles.review__extra}>
           <div className={styles.review__extra_likes}>
             {review.likes && review.likes?.likes}
             <AiOutlineLike />
           </div>
+
           <div className={styles.review__extra_date}>
             {review?.updatedAt?.slice(0, 10)}
           </div>
