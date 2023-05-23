@@ -1,9 +1,9 @@
 import nc from "next-connect";
-import Product from "../../../models/ProductModel";
+// auth
+import Product from '../../../models/ProductModel';
 import User from '../../../models/UserModel';
 import Cart from '../../../models/CartModel';
 import db from '../../../utils/db';
-// auth
 
 const handler = nc();
 
@@ -12,7 +12,7 @@ handler.post(async (req, res) => {
     db.connectDb();
     const { cart, user_id } = req.body;
     let products = [];
-    let user = await User.findById(req.user_id);
+    let user = await User.findById(user_id);
     let existing_cart = await Cart.findOne({ user: user._id });
     if (existing_cart) {
       await existing_cart.remove();
@@ -60,6 +60,7 @@ handler.post(async (req, res) => {
       cartTotal: cartTotal.toFixed(2),
       user: user._id,
     }).save();
+
 
     db.disconnectDb();
   } catch (error) {

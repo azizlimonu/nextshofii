@@ -7,10 +7,13 @@ import CartCheckout from '../components/cart/checkout/CartCheckout';
 import CartPayment from '../components/cart/payment/CartPayment';
 import CartEmpty from '../components/cart/cartEmpty/CartEmpty';
 import { saveCart } from '../libs/user';
+import { updateCart, emptyCart } from '../store/cartSlice';
 
 import { useSelector } from 'react-redux';
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 
 const Cart = () => {
@@ -18,10 +21,26 @@ const Cart = () => {
   const [selected, setSelected] = useState([]);
   const { data: session } = useSession();
   const Router = useRouter();
+  const dispatch = useDispatch();
 
   const [shippingFee, setShippingFee] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
+
+  // update the cart if the items comes first in cart but the now price different
+  // updated cart price every time checkout page load
+  useEffect(() => {
+    const update = async () => {
+      const { data } = await axios.post('/api/updateCart', {
+        products: cart.cartItems,
+      });
+      dispatch(updateCart(data));
+    }
+    if (cart.cartItems.length > 0) {
+      update();
+    }
+    console.log("Triggered")
+  }, []);
 
   useEffect(() => {
     setShippingFee(
@@ -38,8 +57,9 @@ const Cart = () => {
 
   const saveCartToDbHandler = async () => {
     if (session) {
-      const res = saveCart(selected);
-      Router.push("/checkout");
+      const res = saveCart(selected, session.user.id);
+      console.log(selected, session.user.id);
+      // Router.push("/checkout");
     } else {
       signIn();
     }
