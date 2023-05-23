@@ -6,15 +6,18 @@ import CartProduct from '../components/cart/product/CartProduct';
 import CartCheckout from '../components/cart/checkout/CartCheckout';
 import CartPayment from '../components/cart/payment/CartPayment';
 import CartEmpty from '../components/cart/cartEmpty/CartEmpty';
+import { saveCart } from '../libs/user';
 
 import { useSelector } from 'react-redux';
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 
+
 const Cart = () => {
   const { cart } = useSelector((state) => ({ ...state }));
   const [selected, setSelected] = useState([]);
   const { data: session } = useSession();
+  const Router = useRouter();
 
   const [shippingFee, setShippingFee] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
@@ -34,7 +37,12 @@ const Cart = () => {
   }, [selected, shippingFee]);
 
   const saveCartToDbHandler = async () => {
-
+    if (session) {
+      const res = saveCart(selected);
+      Router.push("/checkout");
+    } else {
+      signIn();
+    }
   }
 
   return (
@@ -74,8 +82,6 @@ const Cart = () => {
         ) : (
           <CartEmpty />
         )}
-
-        {/* Product Swiper to other product */}
       </div>
     </>
   )
