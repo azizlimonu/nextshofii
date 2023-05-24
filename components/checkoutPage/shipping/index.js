@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import { Formik, Form } from 'formik';
+import * as Yup from "yup";
+import { FaIdCard } from "react-icons/fa";
+import { GiPhone } from "react-icons/gi";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { IoMdArrowDropupCircle } from "react-icons/io";
+import { AiOutlinePlus } from "react-icons/ai";
+import { IoIosRemoveCircleOutline } from "react-icons/io";
+import "yup-phone";
+
+import styles from './styles.module.scss';
+import ShippingInput from '../../input/shippingInput';
+import SingularSelect from '../../select/SingularSelect';
+import { countries } from '../../../data/countries';
+
+const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
+  const initialValues = {
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    state: "",
+    city: "",
+    zipCode: "",
+    address1: "",
+    address2: "",
+    country: "",
+  };
+
+  const [shipping, setShipping] = useState(initialValues);
+  const [visible, setVisible] = useState(user?.address.length ? false : true);
+
+  const {
+    firstName,
+    lastName,
+    phoneNumber,
+    state,
+    city,
+    zipCode,
+    address1,
+    address2,
+    country,
+  } = shipping;
+
+  const validate = Yup.object({
+    firstName: Yup.string()
+      .required("First name is required.")
+      .min(3, "First name must be atleast 3 characters long.")
+      .max(20, "First name must be less than 20 characters long."),
+    lastName: Yup.string()
+      .required("Last name is required.")
+      .min(3, "Last name must be atleast 3 characters long.")
+      .max(20, "Last name must be less than 20 characters long."),
+    phoneNumber: Yup.string()
+      .required("Phone number is required.")
+      .phone()
+      .min(3, "Phone number must be atleast 3 characters long.")
+      .max(30, "Phone number must be less than 20 characters long."),
+    state: Yup.string()
+      .required("State name is required.")
+      .min(2, "State name should contain 2-60 characters..")
+      .max(60, "State name should contain 2-60 characters."),
+    city: Yup.string()
+      .required("City name is required.")
+      .min(2, "City name should contain 2-60 characters.")
+      .max(60, "City name should contain 2-60 characters."),
+    zipCode: Yup.string()
+      .required("ZipCode/Postal is required.")
+      .min(2, "ZipCode/Postal should contain 2-30 characters..")
+      .max(30, "ZipCode/Postal should contain 2-30 characters."),
+    address1: Yup.string()
+      .required("Address Line 1 is required.")
+      .min(5, "Address Line 1 should contain 5-100 characters.")
+      .max(100, "Address Line 1 should contain 5-100 characters."),
+    address2: Yup.string()
+      .min(5, "Address Line 2 should contain 5-100 characters.")
+      .max(100, "Address Line 2 should contain 5-100 characters."),
+    country: Yup.string().required("Country name is required."),
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setShipping({ ...shipping, [name]: value });
+  };
+
+  const saveShippingHandler = () => { };
+  const changeActiveHandler = () => { };
+  const deleteHandler = () => { };
+
+  return (
+    <div className={styles.shipping}>
+      <div className={styles.addresses}>
+        {addresses.map((address, i) => (
+          <div key={i}>Address{i}</div>
+        ))}
+      </div>
+
+      <button className={styles.hide_show} onClick={() => setVisible(!visible)}>
+        {visible ? (
+          <span>
+            <IoMdArrowDropupCircle style={{ fontSize: "2rem", fill: "#222" }} />
+          </span>
+        ) : (
+          <span>
+            ADD NEW ADDRESS <AiOutlinePlus />
+          </span>
+        )}
+      </button>
+
+      {
+        visible && (
+          <Formik
+            enableReinitialize
+            initialValues={{
+              firstName,
+              lastName,
+              phoneNumber,
+              state,
+              city,
+              zipCode,
+              address1,
+              address2,
+              country,
+            }}
+            validationSchema={validate}
+            onSubmit={() => { console.log("Oke") }}
+          >
+            {(formik) => (
+              <Form>
+                <SingularSelect
+                  name="country"
+                  value={country}
+                  placeholder="*Country"
+                  handleChange={handleChange}
+                  data={countries}
+                />
+                <div className={styles.col}>
+                  <ShippingInput
+                    name="firstName"
+                    placeholder="First Name"
+                    onChange={handleChange}
+                  />
+                  <ShippingInput
+                    name="lastName"
+                    placeholder="Last Name"
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className={styles.col}>
+                  <ShippingInput
+                    name="state"
+                    placeholder="State/Province"
+                    onChange={handleChange}
+                  />
+                  <ShippingInput
+                    name="city"
+                    placeholder="City"
+                    onChange={handleChange}
+                  />
+                </div>4.
+
+                <ShippingInput
+                  name="phoneNumber"
+                  placeholder="Phone number"
+                  onChange={handleChange}
+                />
+                <ShippingInput
+                  name="zipCode"
+                  placeholder="Post/Zip code"
+                  onChange={handleChange}
+                />
+                <ShippingInput
+                  name="address1"
+                  placeholder="Address in ID / KTP"
+                  onChange={handleChange}
+                />
+                <ShippingInput
+                  name="address2"
+                  placeholder="Address in Domisili"
+                  onChange={handleChange}
+                />
+
+                <button type='submit'>Save Address</button>
+              </Form>
+            )}
+          </Formik>
+        )
+      }
+    </div >
+  )
+}
+
+export default CheckoutShipping;
