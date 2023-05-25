@@ -1,6 +1,6 @@
 import React from 'react'
 import { getSession } from "next-auth/react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styles from '../styles/checkout.module.scss';
 import CheckoutShipping from '../components/checkoutPage/shipping';
@@ -12,13 +12,9 @@ import User from '../models/UserModel';
 import Cart from '../models/CartModel';
 
 const Checkout = ({ cart, user }) => {
-  // console.log("cart",cart);
-  // console.log("user",user);
-
   const [addresses, setAddresses] = useState(user?.address || []);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [totalAfterDiscount, setTotalAfterDiscount] = useState("");
-  const [selectedAddress, setSelectedAddress] = useState("");
 
   return (
     <div className={`${styles.container} ${styles.checkout}`}>
@@ -44,7 +40,6 @@ const Checkout = ({ cart, user }) => {
           user={user}
           cart={cart}
           paymentMethod={paymentMethod}
-          selectedAddress={selectedAddress}
         />
       </div>
     </div>

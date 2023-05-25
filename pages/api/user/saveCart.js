@@ -1,23 +1,22 @@
 import nc from "next-connect";
-// auth
 import Product from '../../../models/ProductModel';
 import User from '../../../models/UserModel';
 import Cart from '../../../models/CartModel';
 import db from '../../../utils/db';
+import auth from "../../../middleware/auth";
 
-const handler = nc();
+const handler = nc().use(auth);
 
 handler.post(async (req, res) => {
   try {
     db.connectDb();
-    const { cart, user_id } = req.body;
+    const { cart } = req.body;
     let products = [];
-    let user = await User.findById(user_id);
-    let existing_cart = await Cart.findOne({ user: user._id });
+    let user = await User.findById(req.user);
+    let existing_cart = await Cart.findOne({ user: req.user });
     if (existing_cart) {
       await existing_cart.remove();
     }
-
     for (let i = 0; i < cart.length; i++) {
       // get product & sub product
       // create storage for temporary product
@@ -47,7 +46,6 @@ handler.post(async (req, res) => {
 
       products.push(tempProduct);
     }
-
     let cartTotal = 0;
 
     for (let i = 0; i < products.length; i++) {
@@ -61,10 +59,9 @@ handler.post(async (req, res) => {
       user: user._id,
     }).save();
 
-
     db.disconnectDb();
   } catch (error) {
-    return res.statusCode(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 });
 

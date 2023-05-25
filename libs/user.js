@@ -1,26 +1,35 @@
 import axios from "axios";
 
-export const saveCart = async (cart, user_id) => {
+export const saveCart = async (cart) => {
   try {
     const { data } = await axios.post("/api/user/saveCart", {
       cart,
-      user_id
     });
-    // console.log(cart, user_Id);
     return data;
   } catch (error) {
     return error;
   }
 };
 
-export const saveAddress = async (address, userId) => {
+export const saveAddress = async (address) => {
   try {
     const { data } = await axios.post('/api/user/saveAddress', {
-      address, userId
+      address
     });
     return data;
   } catch (error) {
-    return console.log(error);
+    return error;
+  }
+};
+
+export const changeActiveAddress = async (id) => {
+  try {
+    const { data } = await axios.put("/api/user/manageAddress", {
+      id,
+    });
+    return data;
+  } catch (error) {
+    return error;
   }
 };
 

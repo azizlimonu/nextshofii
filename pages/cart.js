@@ -39,7 +39,7 @@ const Cart = () => {
     if (cart.cartItems.length > 0) {
       update();
     }
-    console.log("Triggered")
+    // console.log("Triggered")
   }, []);
 
   useEffect(() => {
@@ -57,9 +57,9 @@ const Cart = () => {
 
   const saveCartToDbHandler = async () => {
     if (session) {
-      const res = saveCart(selected, session.user.id);
-      console.log(selected, session.user.id);
-      // Router.push("/checkout");
+      const res = saveCart(selected);
+      // console.log(selected, session.user.id);
+      Router.push("/checkout");
     } else {
       signIn();
     }

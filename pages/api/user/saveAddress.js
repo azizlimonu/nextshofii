@@ -1,20 +1,19 @@
 import nc from "next-connect";
-// auth
-import Product from '../../../models/ProductModel';
 import User from '../../../models/UserModel';
-import Cart from '../../../models/CartModel';
 import db from '../../../utils/db';
+import auth from "../../../middleware/auth";
 
-const handler = nc();
+const handler = nc().use(auth);
 
 handler.post(async (req, res) => {
   try {
     db.connectDb();
     // get user info from body
-    const { address, userId } = req.body;
+    const { address } = req.body;
     // get user information
-    const user = User.findById(userId);
+    const user = User.findById(req.user);
     // push the address from body to the user info
+
     await user.updateOne({
       $push: {
         address: address,
@@ -22,7 +21,6 @@ handler.post(async (req, res) => {
     });
     db.disconnectDb();
     return res.json({ addresses: user.address });
-
   } catch (error) {
     return res.statusCode(500).json({ message: error.message });
   }

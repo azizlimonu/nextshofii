@@ -8,14 +8,20 @@ import { IoMdArrowDropupCircle } from "react-icons/io";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import "yup-phone";
+// import Router from 'next/router'
+import { useRouter } from 'next/router';
 
 import styles from './styles.module.scss';
 import ShippingInput from '../../input/shippingInput';
 import SingularSelect from '../../select/SingularSelect';
 import { countries } from '../../../data/countries';
-import { saveAddress } from '../../../libs/user';
+import { changeActiveAddress, saveAddress } from '../../../libs/user';
 
-const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
+const CheckoutShipping = ({
+  user,
+  addresses,
+  setAddresses,
+}) => {
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -27,7 +33,6 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
     address2: "",
     country: "",
   };
-
   const [shipping, setShipping] = useState(initialValues);
   const [visible, setVisible] = useState(user?.address.length ? false : true);
 
@@ -84,13 +89,19 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
     setShipping({ ...shipping, [name]: value });
   };
 
+  const router = useRouter();
   const saveShippingHandler = async () => {
-    const res = await saveAddress(shipping, user._id);
+    const res = await saveAddress(shipping);
     setAddresses([...addresses, res.addresses]);
+    // Router.reload(window.location.pathname);
+    // Router.replace(router.asPath);
+    router.reload(window.location.pathname)
   };
 
-  const changeActiveHandler = () => {
-    console.log("Changed");
+  const changeActiveHandler = async (id) => {
+    const res = await changeActiveAddress(id);
+    setAddresses(res.addresses);
+    router.replace(router.asPath);
   };
 
   const deleteHandler = () => {
@@ -110,8 +121,7 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
             </div>
 
             <div
-              className={`${styles.address} ${address.active && styles.active}`}
-              key={address._id}
+              className={`${styles.address} ${address?.active && styles.active}`}
               onClick={() => changeActiveHandler(address._id)}
             >
               <div className={styles.address__side}>
@@ -121,31 +131,31 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
               <div className={styles.address__col}>
                 <span>
                   <FaIdCard />
-                  {address.firstName.toUpperCase()}{" "}
-                  {address.lastName.toUpperCase()}
+                  {address?.firstName.toUpperCase()}{" "}
+                  {address?.lastName.toUpperCase()}
                 </span>
                 <span>
                   <GiPhone />
-                  {address.phoneNumber}
+                  {address?.phoneNumber}
                 </span>
               </div>
 
               <div className={styles.address__col}>
                 <span>
                   <FaMapMarkerAlt />
-                  {address.address1}
+                  {address?.address1}
                 </span>
-                <span>{address.address2}</span>
+                <span>{address?.address2}</span>
                 <span>
-                  {address.city},{address.state},{address.country}
+                  {address?.city},{address?.state},{address?.country}
                 </span>
-                <span>{address.zipCode}</span>
+                <span>{address?.zipCode}</span>
               </div>
 
               <span
                 className={styles.active__text}
                 style={{
-                  display: `${!address.active && "none"}`,
+                  display: `${!address?.active && "none"}`,
                 }}
               >
                 Active
