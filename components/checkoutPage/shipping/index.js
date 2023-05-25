@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from "yup";
-import { FaIdCard } from "react-icons/fa";
+import { FaIdCard, FaTrash } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoMdArrowDropupCircle } from "react-icons/io";
@@ -15,7 +15,11 @@ import styles from './styles.module.scss';
 import ShippingInput from '../../input/shippingInput';
 import SingularSelect from '../../select/SingularSelect';
 import { countries } from '../../../data/countries';
-import { changeActiveAddress, saveAddress } from '../../../libs/user';
+import {
+  changeActiveAddress,
+  deleteAddress,
+  saveAddress
+} from '../../../libs/user';
 
 const CheckoutShipping = ({
   user,
@@ -90,6 +94,7 @@ const CheckoutShipping = ({
   };
 
   const router = useRouter();
+
   const saveShippingHandler = async () => {
     const res = await saveAddress(shipping);
     setAddresses([...addresses, res.addresses]);
@@ -102,22 +107,25 @@ const CheckoutShipping = ({
     const res = await changeActiveAddress(id);
     setAddresses(res.addresses);
     router.replace(router.asPath);
+    // console.log(res);
   };
 
-  const deleteHandler = () => {
-    console.log("Delete")
+  const deleteHandler = async (id) => {
+    const res = await deleteAddress(id);
+    setAddresses(res.addresses);
+    router.replace(router.asPath);
   };
 
   return (
     <div className={styles.shipping}>
       <div className={styles.addresses}>
-        {addresses.map((address, i) => (
+        {addresses?.map((address, i) => (
           <div key={i} style={{ position: "relative" }}>
             <div
               className={styles.address__delete}
               onClick={() => deleteHandler(address._id)}
             >
-              <IoIosRemoveCircleOutline />
+              <FaTrash />
             </div>
 
             <div

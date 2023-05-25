@@ -34,12 +34,15 @@ export const changeActiveAddress = async (id) => {
 };
 
 export const deleteAddress = async (id) => {
+  console.log("ID REQUEST", id);
   try {
-    const { data } = await axios.delete("/api/user/manageAddress", {
-      data: { id },
-    });
+    // const { data } = await axios.delete("/api/user/manageAddress", {
+    //   data: { id },
+    // });
+    const { data } = await axios.delete(`/api/user/address/${id}`)
+    console.log("DATA REQUEST", data);
     return data;
   } catch (error) {
-    return error.response.data.message;
+    return error;
   }
 };

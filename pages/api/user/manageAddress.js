@@ -40,6 +40,8 @@ handler.delete(async (req, res) => {
   try {
     db.connectDb();
     const { id } = req.body;
+    console.log(req.body.id);
+    console.log("ID => ", id);
     const user = await User.findById(req.user);
     await user.updateOne(
       {
