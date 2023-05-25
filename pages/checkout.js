@@ -34,11 +34,11 @@ const Checkout = ({ cart, user }) => {
       </div>
 
       <div className={styles.checkout__side}>
-        <CheckoutPayment 
+        <CheckoutPayment
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
         />
-        <CheckoutSummary 
+        <CheckoutSummary
           totalAfterDiscount={totalAfterDiscount}
           setTotalAfterDiscount={setTotalAfterDiscount}
           user={user}

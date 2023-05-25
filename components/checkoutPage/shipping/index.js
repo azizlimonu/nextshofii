@@ -13,6 +13,7 @@ import styles from './styles.module.scss';
 import ShippingInput from '../../input/shippingInput';
 import SingularSelect from '../../select/SingularSelect';
 import { countries } from '../../../data/countries';
+import { saveAddress } from '../../../libs/user';
 
 const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
   const initialValues = {
@@ -83,15 +84,74 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
     setShipping({ ...shipping, [name]: value });
   };
 
-  const saveShippingHandler = () => { };
-  const changeActiveHandler = () => { };
-  const deleteHandler = () => { };
+  const saveShippingHandler = async () => {
+    const res = await saveAddress(shipping, user._id);
+    setAddresses([...addresses, res.addresses]);
+  };
+
+  const changeActiveHandler = () => {
+    console.log("Changed");
+  };
+
+  const deleteHandler = () => {
+    console.log("Delete")
+  };
 
   return (
     <div className={styles.shipping}>
       <div className={styles.addresses}>
         {addresses.map((address, i) => (
-          <div key={i}>Address{i}</div>
+          <div key={i} style={{ position: "relative" }}>
+            <div
+              className={styles.address__delete}
+              onClick={() => deleteHandler(address._id)}
+            >
+              <IoIosRemoveCircleOutline />
+            </div>
+
+            <div
+              className={`${styles.address} ${address.active && styles.active}`}
+              key={address._id}
+              onClick={() => changeActiveHandler(address._id)}
+            >
+              <div className={styles.address__side}>
+                <img src={user.image} alt="" />
+              </div>
+
+              <div className={styles.address__col}>
+                <span>
+                  <FaIdCard />
+                  {address.firstName.toUpperCase()}{" "}
+                  {address.lastName.toUpperCase()}
+                </span>
+                <span>
+                  <GiPhone />
+                  {address.phoneNumber}
+                </span>
+              </div>
+
+              <div className={styles.address__col}>
+                <span>
+                  <FaMapMarkerAlt />
+                  {address.address1}
+                </span>
+                <span>{address.address2}</span>
+                <span>
+                  {address.city},{address.state},{address.country}
+                </span>
+                <span>{address.zipCode}</span>
+              </div>
+
+              <span
+                className={styles.active__text}
+                style={{
+                  display: `${!address.active && "none"}`,
+                }}
+              >
+                Active
+              </span>
+            </div>
+          </div>
         ))}
       </div>
 
@@ -123,7 +183,7 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
               country,
             }}
             validationSchema={validate}
-            onSubmit={() => { console.log("Oke") }}
+            onSubmit={() => { saveShippingHandler() }}
           >
             {(formik) => (
               <Form>
@@ -158,7 +218,7 @@ const CheckoutShipping = ({ user, addresses, setAddresses, }) => {
                     placeholder="City"
                     onChange={handleChange}
                   />
-                </div>4.
+                </div>
 
                 <ShippingInput
                   name="phoneNumber"
