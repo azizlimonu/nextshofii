@@ -16,6 +16,16 @@ const Checkout = ({ cart, user }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [totalAfterDiscount, setTotalAfterDiscount] = useState("");
 
+  const [selectedAddress, setSelectedAddress] = useState("");
+  useEffect(() => {
+    let check = addresses.find((ad) => ad.active == true);
+    if (check) {
+      setSelectedAddress(check);
+    } else {
+      setSelectedAddress("");
+    }
+  }, [addresses]);
+
   return (
     <div className={`${styles.container} ${styles.checkout}`}>
       <div className={styles.checkout__side}>
@@ -40,6 +50,7 @@ const Checkout = ({ cart, user }) => {
           user={user}
           cart={cart}
           paymentMethod={paymentMethod}
+          selectedAddress={selectedAddress}
         />
       </div>
     </div>

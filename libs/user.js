@@ -46,3 +46,14 @@ export const deleteAddress = async (id) => {
     return error;
   }
 };
+
+export const applyCoupon = async (coupon) => {
+  try {
+    const { data } = await axios.post('/api/user/applyCoupon', {
+      coupon
+    });
+    return { ...data, success: true }
+  } catch (error) {
+    return { error, success: false }
+  }
+}

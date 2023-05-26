@@ -99,9 +99,9 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "Not Processed",
+      default: "Packaging",
       enum: [
-        "Not Processed",
+        "Packaging",
         "Processing",
         "Dispatched",
         "Cancelled",
