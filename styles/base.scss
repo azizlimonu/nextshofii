@@ -118,6 +118,7 @@ $cubic-bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .swiper-slide img {
+    left: 0;
     height: 300px !important;
     border-radius: 10px !important;
     box-shadow: $shadow-1 !important;
