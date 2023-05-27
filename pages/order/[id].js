@@ -6,6 +6,8 @@ import User from '../../models/UserModel';
 import { IoIosArrowForward } from 'react-icons/io';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import StripePayment from '../../components/payment/StripePayment';
+import { emptyCart } from '../../store/cartSlice';
+import { getSession } from 'next-auth/react';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -21,6 +23,8 @@ function reducer(state, action) {
 }
 
 const OrderPage = ({ orderData, paypal_client_id, stripe_public_key }) => {
+
+  console.log(orderData);
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -78,6 +82,7 @@ const OrderPage = ({ orderData, paypal_client_id, stripe_public_key }) => {
           details
         );
         dispatch({ type: "PAY_SUCCESS", payload: data });
+        dispatch(emptyCart());
       } catch (error) {
         dispatch({ type: "PAY_ERROR", payload: error });
       }
@@ -88,7 +93,7 @@ const OrderPage = ({ orderData, paypal_client_id, stripe_public_key }) => {
     console.log(error);
   };
   // PAYPAL 
-  
+
   return (
     <div className={styles.order}>
       <div className={styles.container}>
@@ -311,8 +316,23 @@ export async function getServerSideProps(context) {
   const id = query.id;
 
   const order = await Order.findById(id)
-    .populate({ path: "user", model: User })
+    .populate({
+      path: "user",
+      model: User,
+      select: '-password'
+    })
     .lean();
+
+  const session = await getSession(context);
+  const user = await User.findById(session.user.id).select("-password");
+
+  if (order.user._id != user._id ) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
 
   let paypal_client_id = process.env.PAYPAL_CLIENT_ID;
   let stripe_public_key = process.env.STRIPE_PUBLIC_KEY;

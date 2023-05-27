@@ -2,7 +2,6 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
 import styles from './style.module.scss';
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { emptyCart } from "../../store/cartSlice";
 
@@ -20,7 +19,6 @@ const CARD_OPTIONS = {
 };
 
 const FormStripe = ({ total, order_id }) => {
-  const { cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
   const [error, setError] = useState("");
