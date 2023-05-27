@@ -5,6 +5,7 @@ import Order from '../../models/OrderModel';
 import User from '../../models/UserModel';
 import { IoIosArrowForward } from 'react-icons/io';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import StripePayment from '../../components/payment/StripePayment';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -19,7 +20,7 @@ function reducer(state, action) {
   }
 }
 
-const OrderPage = ({ orderData, paypal_client_id, }) => {
+const OrderPage = ({ orderData, paypal_client_id, stripe_public_key }) => {
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -51,6 +52,7 @@ const OrderPage = ({ orderData, paypal_client_id, }) => {
     }
   }, [orderData._id, success]);
 
+  // PAYPAL 
   const createOrderHanlder = (data, actions) => {
     return actions.order
       .create({
@@ -83,9 +85,10 @@ const OrderPage = ({ orderData, paypal_client_id, }) => {
   };
 
   const onErroHandler = (data, actions) => {
-    return;
+    console.log(error);
   };
-
+  // PAYPAL 
+  
   return (
     <div className={styles.order}>
       <div className={styles.container}>
@@ -276,15 +279,21 @@ const OrderPage = ({ orderData, paypal_client_id, }) => {
                       createOrder={createOrderHanlder}
                       onApprove={onApproveHandler}
                       onError={onErroHandler}
-                    ></PayPalButtons>
+                    />
                   )}
                 </div>
               )}
+
               {orderData.paymentMethod == "credit_card" && (
-                <span>Bayarlah cuk</span>
+                <StripePayment
+                  total={orderData.total}
+                  order_id={orderData._id}
+                  stripe_public_key={stripe_public_key}
+                />
               )}
+
               {orderData.paymentMethod == "cash" && (
-                <div className={styles.cash}>cash</div>
+                <div className={styles.cash}>COD</div>
               )}
             </div>
           )}
@@ -306,12 +315,14 @@ export async function getServerSideProps(context) {
     .lean();
 
   let paypal_client_id = process.env.PAYPAL_CLIENT_ID;
+  let stripe_public_key = process.env.STRIPE_PUBLIC_KEY;
   db.disconnectDb();
 
   return {
     props: {
       orderData: JSON.parse(JSON.stringify(order)),
       paypal_client_id,
+      stripe_public_key
     }
   };
 }
