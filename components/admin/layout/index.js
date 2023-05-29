@@ -11,7 +11,10 @@ const AdminLayout = ({ children }) => {
     <div className={styles.layout}>
       <Sidebar />
       <div
-        style={{ marginLeft: `${showSidebar ? "280px" : "80px"}` }}
+        style={{
+          marginLeft: `${showSidebar ? "280px" : "80px"}`,
+          minHeight: `${showSidebar ? "100vh" : "110vh"}`
+        }}
         className={styles.layout__main}
       >
         {children}

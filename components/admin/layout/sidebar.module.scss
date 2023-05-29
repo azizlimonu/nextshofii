@@ -2,7 +2,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: #fafafa;
+  background: #eeebeb;
   height: 100%;
   width: 80px;
   transition: all 0.1s ease;
@@ -37,7 +37,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding-bottom: 1rem;
     img {
       width: 60px;
       height: 60px;
@@ -49,7 +48,7 @@
   &__list {
     li {
       width: 50px;
-      height: 50px;
+      height: 35px;
       border-radius: 10px;
       display: flex;
       align-items: center;

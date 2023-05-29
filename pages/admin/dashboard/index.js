@@ -3,8 +3,11 @@ import React from 'react';
 import AdminLayout from '../../../components/admin/layout';
 import styles from '../../../styles/admindashboard.module.scss';
 import Link from "next/link";
+import { useSession } from 'next-auth/react';
 
 const AdminDashboard = () => {
+  const { data: session } = useSession();
+
   return (
     <div>
       <Head>
@@ -20,7 +23,7 @@ const AdminDashboard = () => {
           </div>
 
           <div className={styles.header__right}>
-           
+
           </div>
 
         </div>
@@ -39,7 +42,7 @@ const AdminDashboard = () => {
 
           <div className={styles.card}>
             <div className={styles.card__icon}>
-         
+
             </div>
 
             <div className={styles.card__infos}>
@@ -50,7 +53,7 @@ const AdminDashboard = () => {
 
           <div className={styles.card}>
             <div className={styles.card__icon}>
-       
+
             </div>
 
             <div className={styles.card__infos}>
@@ -61,7 +64,7 @@ const AdminDashboard = () => {
 
           <div className={styles.card}>
             <div className={styles.card__icon}>
-            
+
             </div>
             <div className={styles.card__infos}>
               <h4>+$</h4>
@@ -91,7 +94,7 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-              
+
               </tbody>
             </table>
           </div>
