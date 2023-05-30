@@ -12,7 +12,11 @@ const CreateCategories = ({ setCategories }) => {
     name: Yup.string()
       .required("Category name is required.")
       .min(2, "Category name must be bewteen 2 and 30 characters.")
-      .max(30, "Category name must be bewteen 2 and 30 characters."),
+      .max(30, "Category name must be bewteen 2 and 30 characters.")
+      .matches(
+        /^[a-zA-Z\s]*$/,
+        "Numbers and special charcters are not allowed."
+      )
   });
 
   const submitHandler = async () => {

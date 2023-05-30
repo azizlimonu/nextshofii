@@ -1,38 +1,42 @@
-import React, { useRef, useState } from 'react';
-import { AiFillDelete, AiTwotoneEdit } from 'react-icons/ai';
-import styles from './styles.module.scss';
 import axios from 'axios';
+import React, { useRef, useState } from 'react'
+import { AiFillDelete, AiTwotoneEdit } from 'react-icons/ai';
 import { toast } from 'react-toastify';
+import styles from './styles.module.scss';
 
-const ListCateogry = ({ category, setCategories }) => {
+const ListSubCat = ({
+  categories,
+  subCategory,
+  setSubCategories,
+}) => {
+  console.log("sub", subCategory);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
+  const [parent, setParent] = useState("");
   const input = useRef(null);
 
   const handleRemove = async (id) => {
     try {
-      console.log("remove", id);
-      const { data } = await axios.delete(`/api/admin/category/${id}`);
-      setCategories(data.categories);
+      const { data } = await axios.delete(`/api/admin/subcategory/${id}`);
+      setSubCategories(data.subCategories);
       toast.success(data.message);
     } catch (error) {
-      console.log(error);
       toast.error(error);
     }
   };
 
   const handleUpdate = async (id) => {
     try {
-      console.log("updated", id);
-      const { data } = await axios.put('/api/admin/category', {
-        id, name
+      const { data } = await axios.put("/api/admin/subcategory", {
+        id,
+        name: name || subCategory.name,
+        parent: parent || subCategory.parent._id,
       });
-      setCategories(data.categories);
+      setSubCategories(data.subCategories);
       setOpen(false);
       toast.success(data.message);
     } catch (error) {
-      toast.error(error);
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -41,7 +45,7 @@ const ListCateogry = ({ category, setCategories }) => {
       <input
         className={open ? styles.open : ""}
         type="text"
-        value={name ? name : category.name}
+        value={name ? name : subCategory.name}
         onChange={(e) => setName(e.target.value)}
         disabled={!open}
         ref={input}
@@ -49,9 +53,23 @@ const ListCateogry = ({ category, setCategories }) => {
 
       {open && (
         <div className={styles.list__item_expand}>
+          <select
+            name="parent"
+            value={parent || subCategory.parent._id}
+            onChange={(e) => setParent(e.target.value)}
+            disabled={!open}
+            className={styles.select}
+          >
+            {categories.map((c) => (
+              <option value={c._id} key={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+
           <button
             className={styles.btn}
-            onClick={() => handleUpdate(category._id)}
+            onClick={() => handleUpdate(subCategory._id)}
           >
             Save
           </button>
@@ -61,6 +79,7 @@ const ListCateogry = ({ category, setCategories }) => {
             onClick={() => {
               setOpen(false);
               setName("");
+              setParent("");
             }}
           >
             Cancel
@@ -78,10 +97,10 @@ const ListCateogry = ({ category, setCategories }) => {
           />
         )}
 
-        <AiFillDelete onClick={() => handleRemove(category._id)} />
+        <AiFillDelete onClick={() => handleRemove(subCategory._id)} />
       </div>
     </div>
   )
 }
 
-export default ListCateogry;
+export default ListSubCat;
