@@ -61,7 +61,7 @@ handler.put(async (req, res) => {
     console.log("Updated => ", name);
 
     db.connectDb();
-    const exist = await Category.findById(id);
+    const exist = await SubCategory.findById(id);
     if (exist) {
       await SubCategory.findByIdAndUpdate(id, {
         name,
