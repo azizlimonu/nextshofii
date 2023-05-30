@@ -9,17 +9,20 @@ const handler = nc().use(auth).use(admin);
 
 handler.get(async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category } = req.params;
     console.log(category);
     if (!category) {
-      return res.json([]);
+      return res.status(404).json({ message: "Theres no category" });
     }
     db.connectDb();
-    const results = await SubCategory.find({ parent: category }).select("name");
-    console.log(results);
+    const results = await SubCategory
+      .find({ parent: category })
+      .select("name");
+
     db.disconnectDb();
-    return res.json(results);
+    return res.status(200).json(results);
   } catch (error) {
+    db.disconnectDb();
     res.status(500).json({ message: error.message });
   }
 });

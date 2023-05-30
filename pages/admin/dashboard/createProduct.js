@@ -1,31 +1,219 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '../../../components/admin/layout';
 import styles from '../../../styles/createproduct.module.scss';
 import { Form, Formik } from 'formik';
+import db from '../../../utils/db';
+import Product from '../../../models/ProductModel';
+import Category from '../../../models/CategoryModel';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import * as Yup from "yup";
+import ImagesForm from '../../../components/admin/createProduct/imagesForm';
+import ColorsForm from '../../../components/admin/createProduct/colorsForm';
+import StyleForm from '../../../components/admin/createProduct/styleForm';
+import SingularSelect from '../../../components/select/SingularSelect';
+import MultipleSelect from '../../../components/select/MultipleSelect';
 
-const CreateProduct = () => {
+const initialState = {
+  name: "",
+  description: "",
+  brand: "",
+  discount: 0,
+  images: [],
+  description_images: [],
+  parent: "",
+  category: "",
+  subCategories: [],
+  color: {
+    color: "",
+    image: "",
+  },
+  sizes: [
+    {
+      size: "",
+      qty: "",
+      price: "",
+    },
+  ],
+  details: [
+    {
+      name: "",
+      value: "",
+    },
+  ],
+  questions: [
+    {
+      question: "",
+      answer: "",
+    },
+  ],
+  shippingFee: "",
+};
+
+const CreateProduct = ({ parents, categories }) => {
+  console.log("parents", parents);
+  console.log("categories", categories);
+
+  const [product, setProduct] = useState(initialState);
+  const [subs, setSubs] = useState([]);
+  const [colorImage, setColorImage] = useState("");
+  const [images, setImages] = useState([]);
+  const [description_images, setDescription_images] = useState("");
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getParentData = async () => {
+      // Only fetch data if a value has been selected
+      if (product.parent !== "") {
+        console.log("product parent id to api =", product.parent);
+        const { data } = await axios.get(`/api/product/${product.parent}`);
+        console.log("Parent Data", data);
+        if (data) {
+          setProduct({
+            ...product,
+            name: data.name,
+            description: data.description,
+            brand: data.brand,
+            category: data.category,
+            subCategories: data.subCategories,
+            questions: [],
+            details: [],
+          });
+        }
+      }
+    };
+    getParentData();
+  }, [product?.parent]);
+
+  useEffect(() => {
+    if (product.category !== "") {
+      const getSubProduct = async () => {
+        const { data } = await axios.get(`/api/admin/subCategory`, {
+          params: {
+            category: product.category,
+          },
+        });
+        console.log("SubCat DATA", data);
+        setSubs(data);
+      };
+      getSubProduct();
+    }
+  }, [product?.category]);
+
+  const validate = {
+    name: Yup.string()
+      .required("Please add a name")
+      .min(10, "Product name must bewteen 10 and 300 characters.")
+      .max(300, "Product name must bewteen 10 and 300 characters."),
+    brand: Yup.string().required("Please add a brand"),
+    category: Yup.string().required("Please select a category."),
+    color: Yup.string().required("Please add a color"),
+    description: Yup.string().required("Please add a description"),
+  };
+
+  const createProduct = () => {
+    console.log("OK");
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setProduct({ ...product, [name]: value });
+  };
+
   return (
     <AdminLayout>
       <div className={styles.header}>Create Product</div>
 
-      <Formik>
+      <Formik
+        enableReinitialize
+        validationSchema={validate}
+        initialValues={{
+          name: product.name,
+          brand: product.brand,
+          description: product.description,
+          category: product.category,
+          subCategories: product.subCategories,
+          parent: product.parent,
+          discount: product.discount,
+          color: product.color.color,
+          imageInputFile: "",
+          styleInout: "",
+        }}
+        onSubmit={() => {
+          createProduct();
+        }}
+      >
         {(formik) => (
           <Form>
             {/* Images Input File */}
+            <ImagesForm
+              name=""
+              header=""
+              text=""
+              images={""}
+              setImages={""}
+              setColorImage={""}
+            />
 
             <div className={styles.flex}>
-              {/* Image Color */}
-              {/* product span color */}
+              {product?.color.image && (
+                <img
+                  src={product.color.image}
+                  className={styles.image_span}
+                  alt=""
+                />
+              )}
+
+              {product?.color.color && (
+                <span
+                  className={styles.color_span}
+                  style={{ background: `${product.color.color}` }}
+                ></span>
+              )}
             </div>
 
-            {/* Colors input */}
+            <ColorsForm
+              name=""
+              product={""}
+              setProduct={""}
+              colorImage={""}
+            />
 
-            {/* Style Input */}
+            <StyleForm
+              name="styleInput"
+              product={product}
+              setProduct={setProduct}
+              colorImage={colorImage}
+            />
 
             {/* Singular select parent */}
-            {/* Singular select category */}
+            <SingularSelect
+              name="parent"
+              value={product?.parent}
+              placeholder="Parent product"
+              data={parents}
+              header="Add to an existing product"
+              handleChange={handleChange}
+            />
 
-            {/* multiple secet of sub categories */}
+            {/* Singular select category */}
+            <SingularSelect
+              name="category"
+              value={product?.category}
+              placeholder="Category"
+              data={categories}
+              header="Select a Category"
+              handleChange={handleChange}
+              disabled={product?.parent}
+            />
+
+            {/* multiple select of sub categories */}
+            {product?.category && (
+              <MultipleSelect
+
+              />
+            )}
 
             <div className={styles.header}>Basic Infos</div>
 
@@ -52,3 +240,19 @@ const CreateProduct = () => {
 }
 
 export default CreateProduct;
+
+export async function getServerSideProps(context) {
+  db.connectDb();
+  const results = await Product
+    .find()
+    .select("name subProducts")
+    .lean();
+  const categories = await Category.find().lean();
+  db.disconnectDb();
+  return {
+    props: {
+      parents: JSON.parse(JSON.stringify(results)),
+      categories: JSON.parse(JSON.stringify(categories)),
+    },
+  };
+}

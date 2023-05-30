@@ -38,7 +38,6 @@ handler.get(async (req, res) => {
       price,
       priceBefore,
       quantity: product.subProducts[style].sizes[size].qty,
-      // sku deleteds
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
