@@ -5,18 +5,19 @@ import storage from 'redux-persist/lib/storage';
 import { persistReducer } from "redux-persist";
 import expandSidebar from "./expandSlice";
 import cart from '../store/cartSlice'
+import dialog from "./dialogSlice";
 
-const reducers = combineReducers({ cart, expandSidebar });
+const reducers = combineReducers({ cart, expandSidebar, dialog });
 
 const config = {
   key: "root",
   storage
 }
 
-const reducer = persistReducer(config,reducers);
+const reducer = persistReducer(config, reducers);
 
 const store = configureStore({
-  reducer:reducer,
+  reducer: reducer,
   devTools: process.env.NODE_ENV !== "production",
   middleware: [thunk]
 });

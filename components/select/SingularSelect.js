@@ -10,7 +10,6 @@ const SingularSelect = ({
   disabled,
   ...rest
 }) => {
-
   const [field, meta] = useField(rest);
 
   return (
@@ -28,6 +27,7 @@ const SingularSelect = ({
           </div>
         </div>
       )}
+      
       <TextField
         variant="outlined"
         name={field.name}
@@ -42,15 +42,15 @@ const SingularSelect = ({
         <MenuItem key={""} value={""}>
           No Selected / Or Empty
         </MenuItem>
+
         {data.map((option) => (
-          <MenuItem
-            key={option._id}
-            value={option._id || option.name
-            }>
+          <MenuItem key={option._id} value={option._id || option.name}>
             {option.name}
           </MenuItem>
         ))}
+
       </TextField>
+      
       {meta.touched && meta.error && (
         <p className={styles.error__msg}>
           <ErrorMessage name={field.name} />

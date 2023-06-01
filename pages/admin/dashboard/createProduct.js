@@ -8,11 +8,15 @@ import Category from '../../../models/CategoryModel';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import * as Yup from "yup";
-import ImagesForm from '../../../components/admin/createProduct/imagesForm';
 import ColorsForm from '../../../components/admin/createProduct/colorsForm';
 import StyleForm from '../../../components/admin/createProduct/styleForm';
 import SingularSelect from '../../../components/select/SingularSelect';
 import MultipleSelect from '../../../components/select/MultipleSelect';
+import AdminInput from '../../../components/input/adminInput';
+import DialogModal from '../../../components/dialogmodal';
+import { hideDialog, showDialog } from '../../../store/dialogSlice';
+import ImagesForm from '../../../components/admin/createProduct/imagesForm';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   name: "",
@@ -51,24 +55,22 @@ const initialState = {
 };
 
 const CreateProduct = ({ parents, categories }) => {
-  console.log("parents", parents);
-  console.log("categories", categories);
-
   const [product, setProduct] = useState(initialState);
   const [subs, setSubs] = useState([]);
   const [colorImage, setColorImage] = useState("");
   const [images, setImages] = useState([]);
   const [description_images, setDescription_images] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // const { dialog } = useSelector((state) => ({ ...state }));
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getParentData = async () => {
       // Only fetch data if a value has been selected
       if (product.parent !== "") {
-        console.log("product parent id to api =", product.parent);
         const { data } = await axios.get(`/api/product/${product.parent}`);
-        console.log("Parent Data", data);
         if (data) {
           setProduct({
             ...product,
@@ -89,19 +91,19 @@ const CreateProduct = ({ parents, categories }) => {
   useEffect(() => {
     if (product.category !== "") {
       const getSubProduct = async () => {
-        const { data } = await axios.get(`/api/admin/subCategory`, {
-          params: {
-            category: product.category,
-          },
-        });
-        console.log("SubCat DATA", data);
+        const { data } = await axios.get(`/api/admin/subcategory/${product.category}`);
         setSubs(data);
       };
       getSubProduct();
     }
   }, [product?.category]);
 
-  const validate = {
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setProduct({ ...product, [name]: value });
+  };
+
+  const validate = Yup.object({
     name: Yup.string()
       .required("Please add a name")
       .min(10, "Product name must bewteen 10 and 300 characters.")
@@ -110,24 +112,25 @@ const CreateProduct = ({ parents, categories }) => {
     category: Yup.string().required("Please select a category."),
     color: Yup.string().required("Please add a color"),
     description: Yup.string().required("Please add a description"),
-  };
+  });
 
   const createProduct = () => {
-    console.log("OK");
+    // dispatch(showDialog({
+    //   header: "Please Follow Our Instructions",
+    //   messages: { msg: "WOY TEST", type: "error" }
+    // }))
   };
 
-  const handleChange = (e) => {
-    const { value, name } = e.target;
-    setProduct({ ...product, [name]: value });
+  const createProductHandler = () => {
+    console.log("Submitted");
   };
 
   return (
     <AdminLayout>
-      <div className={styles.header}>Create Product</div>
-
+      <div className={styles.header} onClick={() => createProduct()}>Create Product</div>
+      <DialogModal />
       <Formik
         enableReinitialize
-        validationSchema={validate}
         initialValues={{
           name: product.name,
           brand: product.brand,
@@ -140,32 +143,31 @@ const CreateProduct = ({ parents, categories }) => {
           imageInputFile: "",
           styleInout: "",
         }}
+        validationSchema={validate}
         onSubmit={() => {
           createProduct();
         }}
       >
         {(formik) => (
           <Form>
-            {/* Images Input File */}
             <ImagesForm
-              name=""
-              header=""
-              text=""
-              images={""}
-              setImages={""}
-              setColorImage={""}
+              name="imageInputFile"
+              header="Product Carousel Images"
+              text="Add images"
+              images={images}
+              setImages={setImages}
+              setColorImage={setColorImage}
             />
 
             <div className={styles.flex}>
-              {product?.color.image && (
+              {product.color.image && (
                 <img
                   src={product.color.image}
                   className={styles.image_span}
                   alt=""
                 />
               )}
-
-              {product?.color.color && (
+              {product.color.color && (
                 <span
                   className={styles.color_span}
                   style={{ background: `${product.color.color}` }}
@@ -174,10 +176,10 @@ const CreateProduct = ({ parents, categories }) => {
             </div>
 
             <ColorsForm
-              name=""
-              product={""}
-              setProduct={""}
-              colorImage={""}
+              name="color"
+              product={product}
+              setProduct={setProduct}
+              colorImage={colorImage}
             />
 
             <StyleForm
@@ -187,47 +189,100 @@ const CreateProduct = ({ parents, categories }) => {
               colorImage={colorImage}
             />
 
-            {/* Singular select parent */}
             <SingularSelect
               name="parent"
-              value={product?.parent}
+              value={product.parent}
               placeholder="Parent product"
               data={parents}
               header="Add to an existing product"
               handleChange={handleChange}
             />
 
-            {/* Singular select category */}
             <SingularSelect
               name="category"
-              value={product?.category}
+              value={product.category}
               placeholder="Category"
               data={categories}
               header="Select a Category"
               handleChange={handleChange}
-              disabled={product?.parent}
+              disabled={product.parent}
             />
 
-            {/* multiple select of sub categories */}
-            {product?.category && (
+            {product.category && (
               <MultipleSelect
-
+                value={product.subCategories}
+                data={subs}
+                header="Select SubCategories"
+                name="subCategories"
+                disabled={product.parent}
+                handleChange={handleChange}
               />
             )}
 
             <div className={styles.header}>Basic Infos</div>
 
-            {/* Admin Input Name */}
-            {/* Admin Input Description */}
-            {/* Admin Input Brand */}
-            {/* Admin Input Discount */}
+            <AdminInput
+              type="text"
+              label="Name"
+              name="name"
+              placholder="Product name"
+              onChange={handleChange}
+            />
 
-            {/* Sizes component */}
-            {/* Details component */}
-            {/* Question component */}
+            <AdminInput
+              type="text"
+              label="Description"
+              name="description"
+              placholder="Product description"
+              onChange={handleChange}
+            />
+
+            <AdminInput
+              type="text"
+              label="Brand"
+              name="brand"
+              placholder="Product brand"
+              onChange={handleChange}
+            />
+
+            <AdminInput
+              type="text"
+              label="Discount"
+              name="discount"
+              placholder="Product discount"
+              onChange={handleChange}
+            />
+
+            {/* <SizesForm
+              sizes={product.sizes}
+              product={product}
+              setProduct={setProduct}
+            /> */}
+
+            {/* <DetailsForm
+              details={product.details}
+              product={product}
+              setProduct={setProduct}
+            /> */}
+
+            {/* <QuestionsForm
+              questions={product.questions}
+              product={product}
+              setProduct={setProduct}
+            /> */}
+            {/*
+            <Images
+              name="imageDescInputFile"
+              header="Product Description Images"
+              text="Add images"
+              images={description_images}
+              setImages={setDescriptionImages}
+              setColorImage={setColorImage}
+            />
+              */}
 
             <button
-              type='submit'
+              type="submit"
               className={`${styles.btn} ${styles.btn__primary} ${styles.submit_btn}`}
             >
               Create Product
@@ -236,17 +291,14 @@ const CreateProduct = ({ parents, categories }) => {
         )}
       </Formik>
     </AdminLayout>
-  )
+  );
 }
 
 export default CreateProduct;
 
 export async function getServerSideProps(context) {
   db.connectDb();
-  const results = await Product
-    .find()
-    .select("name subProducts")
-    .lean();
+  const results = await Product.find().select("name subProducts").lean();
   const categories = await Category.find().lean();
   db.disconnectDb();
   return {
