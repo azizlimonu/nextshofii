@@ -1,21 +1,32 @@
 import React from 'react';
 import Header from '../header';
 import Footer from '../footer';
+import { useRouter } from 'next/router';
 
 const Layout = ({ children }) => {
-
   const country = {
     name: "Indonesia",
     flag: "https://cdn.ipregistry.co/flags/emojitwo/id.svg"
   };
 
+  const router = useRouter();
+  const isInsideAdminPath = router.pathname.startsWith('/admin');
+
   return (
     <>
-      <Header country={country} />
-      {children}
-      <Footer country={country} />
+      {isInsideAdminPath ? (
+        <>
+          {children}
+        </>
+      ) : (
+        <>
+          <Header country={country} />
+          {children}
+          <Footer country={country} />
+        </>
+      )}
     </>
-  )
+  );
 };
 
 export default Layout;

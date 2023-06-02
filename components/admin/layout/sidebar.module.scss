@@ -1,8 +1,8 @@
 .sidebar {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  background: #eeebeb;
+  background: #fafafa;
   height: 100%;
   width: 80px;
   transition: all 0.1s ease;
@@ -25,7 +25,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    height: auto;
+    height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -48,12 +48,11 @@
   &__list {
     li {
       width: 50px;
-      height: 35px;
+      height: 43px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       padding-left: 13px;
-      margin-bottom: 10px;
       cursor: pointer;
       &:hover {
         background: $blue-color;
@@ -93,7 +92,6 @@
     ul {
       margin-top: 5px;
       li {
-        margin-bottom: 5px;
         &:last-of-type {
           margin-bottom: 0;
         }

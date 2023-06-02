@@ -4,11 +4,11 @@
   &__main {
     &_grid {
       max-width: 600px;
-      max-height: 550px;
+      height: 700px;
       display: grid;
       img {
         width: 100%;
-        height: auto;
+        height: 700px;
         object-fit: cover;
       }
       &_wrap {
@@ -69,9 +69,6 @@
       margin-top: 1rem;
     }
   }
-  &__noImages {
-    max-height: 350px !important;
-  }
 }
 /*--------------------GRID IMAGES-----------------------*/
 .grid__two {
@@ -100,7 +97,7 @@
     }
   }
 }
-.grid__four {
+.grid__foor {
   grid-template-columns: repeat(2, 1fr);
   img {
     height: 350px;

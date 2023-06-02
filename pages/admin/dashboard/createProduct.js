@@ -17,6 +17,9 @@ import DialogModal from '../../../components/dialogmodal';
 import { hideDialog, showDialog } from '../../../store/dialogSlice';
 import ImagesForm from '../../../components/admin/createProduct/imagesForm';
 import { useSelector } from 'react-redux';
+import SizesForm from '../../../components/admin/createProduct/optionalForm/SizesForm';
+import DetailsForm from '../../../components/admin/createProduct/optionalForm/DetailsForm';
+import QuestionsForm from '../../../components/admin/createProduct/optionalForm/QuestionsForm';
 
 const initialState = {
   name: "",
@@ -63,7 +66,7 @@ const CreateProduct = ({ parents, categories }) => {
   const [loading, setLoading] = useState(false);
 
   // const { dialog } = useSelector((state) => ({ ...state }));
-  
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -253,23 +256,23 @@ const CreateProduct = ({ parents, categories }) => {
               onChange={handleChange}
             />
 
-            {/* <SizesForm
+            <SizesForm
               sizes={product.sizes}
               product={product}
               setProduct={setProduct}
-            /> */}
+            />
 
-            {/* <DetailsForm
+            <DetailsForm
               details={product.details}
               product={product}
               setProduct={setProduct}
-            /> */}
+            />
 
-            {/* <QuestionsForm
+            <QuestionsForm
               questions={product.questions}
               product={product}
               setProduct={setProduct}
-            /> */}
+            />
             {/*
             <Images
               name="imageDescInputFile"

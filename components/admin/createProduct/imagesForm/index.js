@@ -20,9 +20,6 @@ const ImagesForm = ({
   const fileInput = useRef(null);
   const [meta, field] = useField({ ...props, name: name });
 
-  console.log(images);
-  console.log(images.length);
-
   const handleImages = (e) => {
     let files = Array.from(e.target.files);
     files.forEach((img, i) => {
@@ -116,23 +113,27 @@ const ImagesForm = ({
         onChange={handleImages}
       />
 
-      <div className={styles.images__main}>
+      <div className={`${styles.images__main} ${images.length === 0 && styles.images__noImages}`}>
         <div
           className={`${styles.images__main_grid} ${images.length == 2
-            ? styles.grid__two
-            : images.length == 3
-              ? styles.grid__three
-              : images.length == 4
-                ? styles.grid__foor
-                : images.length == 5
-                  ? styles.grid__five
-                  : images.length == 6
-                    ? styles.grid__six
-                    : ""
+              ? styles.grid__two
+              : images.length == 3
+                ? styles.grid__three
+                : images.length == 4
+                  ? styles.grid__four
+                  : images.length == 5
+                    ? styles.grid__five
+                    : images.length == 6
+                      ? styles.grid__six
+                      : ""
             }`}
         >
           {!images.length ? (
-            <img src="../../../images/no_image.png" alt="" />
+            <img
+              style={{ width: "auto", height: "300px", objectFit: "fill" }}
+              src="../../../images/no_image.png"
+              alt=""
+            />
           ) : (
             images?.map((img, i) => (
               <div className={styles.images__main_grid_wrap} key={i}>
@@ -141,14 +142,16 @@ const ImagesForm = ({
                 <img src={img} alt="" />
 
                 <div className={styles.images__main_grid_actions}>
-                  <button onClick={() => handleRemove(img)}>
+                  <button type='button' onClick={() => handleRemove(img)}>
                     <RiDeleteBin7Fill />
                   </button>
-                  <button onClick={() => setColorImage(img)}>
+
+                  <button type='button' onClick={() => setColorImage(img)}>
                     <GiExtractionOrb />
                   </button>
+
                   <button>
-                    <RiShape2Line />
+                    <RiShape2Line type='button' />
                   </button>
                 </div>
               </div>

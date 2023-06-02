@@ -110,7 +110,7 @@ const Sidebar = () => {
               </Link>
             </li>
 
-            <li className={route == "dashboard/createProduct" ? styles.active : ""}>
+            <li className={route == "createProduct" ? styles.active : ""}>
               <Link href="/admin/dashboard/createProduct">
                 <BsPatchPlus />
                 <span className={styles.show}>Create Product</span>
