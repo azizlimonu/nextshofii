@@ -20,6 +20,11 @@ import { useSelector } from 'react-redux';
 import SizesForm from '../../../components/admin/createProduct/optionalForm/SizesForm';
 import DetailsForm from '../../../components/admin/createProduct/optionalForm/DetailsForm';
 import QuestionsForm from '../../../components/admin/createProduct/optionalForm/QuestionsForm';
+import { validateCreateProduct } from '../../../utils/validation';
+import { uploadImages } from '../../../libs/upload';
+import dataURItoBlob from '../../../utils/dataURItoBlob';
+import { toast } from 'react-toastify';
+import DotLoaders from '../../../components/loaders/DotLoaders';
 
 const initialState = {
   name: "",
@@ -117,19 +122,73 @@ const CreateProduct = ({ parents, categories }) => {
     description: Yup.string().required("Please add a description"),
   });
 
-  const createProduct = () => {
-    // dispatch(showDialog({
-    //   header: "Please Follow Our Instructions",
-    //   messages: { msg: "WOY TEST", type: "error" }
-    // }))
+  // validate product handler before actually create product
+  const createProduct = async () => {
+    let isValid = validateCreateProduct(product, images);
+    if (isValid == "valid") {
+      createProductHandler();
+    } else {
+      dispatch(
+        showDialog({
+          header: "Please follow our instructions.",
+          messages: isValid,
+        })
+      );
+    }
   };
 
-  const createProductHandler = () => {
-    console.log("Submitted");
+  // create product handler
+  let uploaded_images = [];
+  let style_img = "";
+  const createProductHandler = async () => {
+    try {
+      setLoading(true);
+      // check if theres image convert to blob and upload in cloudinary
+      if (images) {
+        const imagePromises = images.map(async (img) => {
+          const blob = dataURItoBlob(img);
+          const formData = new FormData();
+          formData.append("path", "product images");
+          formData.append("file", blob);
+
+          const { data } = await uploadImages(formData);
+          return data;
+        });
+        uploaded_images = await Promise.all(imagePromises);
+      }
+
+      // check if theres colors image, conver, upload in cloudinary
+      if (product.color.image) {
+        const blob = dataURItoBlob(product.color.image);
+        const formData = new FormData();
+        formData.append("path", "product style images");
+        formData.append("file", blob);
+
+        const cloudinary_style_img = await uploadImages(formData);
+        style_img = cloudinary_style_img[0].url;
+      }
+
+      // post the product and save to Db
+      const { data } = await axios.post("/api/admin/product", {
+        ...product,
+        images: uploaded_images,
+        color: {
+          image: style_img,
+          color: product.color.color,
+        },
+      });
+      setLoading(false);
+      toast.success(data.message);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
   return (
     <AdminLayout>
+      <DotLoaders loading={loading}   />
       <div className={styles.header} onClick={() => createProduct()}>Create Product</div>
       <DialogModal />
       <Formik

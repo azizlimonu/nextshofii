@@ -8,9 +8,10 @@ const SingularSelect = ({
   placeholder,
   header,
   disabled,
+  name,
   ...rest
 }) => {
-  const [field, meta] = useField(rest);
+  const [field, meta] = useField({ name: name, ...rest });
 
   return (
     <div style={{ marginBottom: "1rem" }}>
@@ -27,7 +28,7 @@ const SingularSelect = ({
           </div>
         </div>
       )}
-      
+
       <TextField
         variant="outlined"
         name={field.name}
@@ -50,7 +51,7 @@ const SingularSelect = ({
         ))}
 
       </TextField>
-      
+
       {meta.touched && meta.error && (
         <p className={styles.error__msg}>
           <ErrorMessage name={field.name} />

@@ -38,7 +38,7 @@ handler.post(async (req, res) => {
       images.push(img);
       removeTmp(file.tempFilePath);
     }
-    return res.status(200).json()
+    return res.status(200).json(images);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

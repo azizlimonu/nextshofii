@@ -47,10 +47,12 @@ const MultipleSelect = ({
 }) => {
 
   const [subs, setSubs] = useState(data || []);
-  const [field, meta] = useField(rest);
+  const [field, meta] = useField({ name: name, ...rest });
+
   useEffect(() => {
     setSubs(data);
   }, [data]);
+
   const result = data.length
     ? data.reduce((obj, cur) => ({ ...obj, [cur._id]: cur.name }), {})
     : {};
@@ -62,15 +64,15 @@ const MultipleSelect = ({
   return (
     <div>
       <div
-        className={`${styles.header} ${meta.error[name] ? styles.header__error : ""
+        className={`${styles.header} ${meta.error ? styles.header__error : ""
           }`}
       >
         <div className={styles.flex}>
-          {meta.error[name] && <img src="../../../images/warning.png" alt="" />}
+          {meta.error && <img src="../../../images/warning.png" alt="" />}
           {header}
         </div>
         <span>
-          {meta.touched && meta.error.subCategories && (
+          {meta.touched && meta.error && (
             <div className={styles.error__msg}>
               <span></span>
               <ErrorMessage name={name} />
