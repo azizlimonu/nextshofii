@@ -1,8 +1,9 @@
 import React from 'react';
 import AdminLayout from '../../../components/admin/layout';
 import UsersTable from '../../../components/admin/users/usersTable';
+import User from '../../../models/UserModel';
 
-const UsersPage = ({users}) => {
+const UsersPage = ({ users }) => {
   return (
     <AdminLayout>
       <UsersTable rows={users} />
