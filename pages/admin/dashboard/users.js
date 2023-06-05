@@ -2,6 +2,7 @@ import React from 'react';
 import AdminLayout from '../../../components/admin/layout';
 import UsersTable from '../../../components/admin/users/usersTable';
 import User from '../../../models/UserModel';
+import db from '../../../utils/db';
 
 const UsersPage = ({ users }) => {
   return (

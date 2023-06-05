@@ -23,6 +23,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import styles from "./style.module.scss";
 import { RiDeleteBin7Fill } from "react-icons/ri";
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -274,6 +275,18 @@ const UsersTable = ({ rows }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleDelete = () => {
+    // const userIds = ['id1', 'id2', 'id3']; // Array of user IDs to delete
+    console.log("DELETED USERS ID =>", selected.join(','))
+
+    // try {
+    // const response = await axios.delete(`/api/deleteUsers?ids=${userIds.join(',')}`);
+    // console.log(response.data); // Response from the API
+    // } catch (error) {
+    // console.error(error);
+    // }
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -367,7 +380,9 @@ const UsersTable = ({ rows }) => {
                         )}
                       </TableCell>
                       <TableCell align="right">
-                        <RiDeleteBin7Fill />
+                        <button onClick={() => handleDelete()}>
+                          <RiDeleteBin7Fill />
+                        </button>
                       </TableCell>
                     </TableRow>
                   );
