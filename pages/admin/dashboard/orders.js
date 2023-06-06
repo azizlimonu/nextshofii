@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
     })
     .sort({ createdAt: -1 })
     .lean();
-
+  await db.disconnectDb();
   const filteredOrders = orders.filter(order => order.user !== null);
 
   return {

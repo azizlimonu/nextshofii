@@ -40,7 +40,7 @@ const ProductSwiper = ({images}) => {
       >
         {images.map((img,i) => (
           <SwiperSlide key={i}>
-            <img src={img.url} alt="" />
+            <img src={img?.url} alt="" />
           </SwiperSlide>
         ))}
       </Swiper>

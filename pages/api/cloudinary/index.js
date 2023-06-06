@@ -12,12 +12,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// configuration api endpoint to use tempFile
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 const handler = nc()
   .use(
@@ -25,6 +19,13 @@ const handler = nc()
       useTempFiles: true,
     })
   ).use(imgMiddleware);
+
+// configuration api endpoint to use tempFile
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 // post image to cloudinary
 handler.post(async (req, res) => {
@@ -45,7 +46,11 @@ handler.post(async (req, res) => {
 });
 
 handler.delete(async (req, res) => {
-
+  let image_id = req.body.public_id;
+  cloudinary.v2.uploader.destroy(image_id, (err, res) => {
+    if (err) return res.status(400).json({ success: false, err });
+    res.json({ success: true });
+  });
 });
 
 const uploadToCloudinaryHandler = async (file, path) => {
@@ -74,7 +79,5 @@ const removeTmp = (path) => {
     if (err) throw err;
   });
 };
-
-
 
 export default handler;

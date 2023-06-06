@@ -69,7 +69,7 @@ const CreateProduct = ({ parents, categories }) => {
   const [images, setImages] = useState([]);
   const [description_images, setDescription_images] = useState("");
   const [loading, setLoading] = useState(false);
-
+  // console.log(loading);
   // const { dialog } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -146,15 +146,17 @@ const CreateProduct = ({ parents, categories }) => {
       // check if theres image convert to blob and upload in cloudinary
       if (images) {
         const imagePromises = images.map(async (img) => {
-          const blob = dataURItoBlob(img);
-          const formData = new FormData();
+          let blob = dataURItoBlob(img);
+          let formData = new FormData();
           formData.append("path", "product images");
           formData.append("file", blob);
 
-          const { data } = await uploadImages(formData);
+          const data = await uploadImages(formData);
           return data;
         });
-        uploaded_images = await Promise.all(imagePromises);
+        uploaded_images = (await Promise.all(imagePromises)).flat(Infinity);
+        // console.log(imagePromises);
+        // console.log("uploaded_images", uploaded_images);
       }
 
       // check if theres colors image, conver, upload in cloudinary
@@ -177,8 +179,11 @@ const CreateProduct = ({ parents, categories }) => {
           color: product.color.color,
         },
       });
+      // console.log("Upload images=>", uploaded_images);
+      // console.log("PRODUCT THAT SENT =>", product);
       setLoading(false);
       toast.success(data.message);
+      setProduct(initialState);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -188,7 +193,7 @@ const CreateProduct = ({ parents, categories }) => {
 
   return (
     <AdminLayout>
-      <DotLoaders loading={loading}   />
+      {loading && <DotLoaders loading={loading} />}
       <div className={styles.header} onClick={() => createProduct()}>Create Product</div>
       <DialogModal />
       <Formik

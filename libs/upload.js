@@ -6,5 +6,6 @@ export const uploadImages = async (formData) => {
       "content-type": "multipart/form-data",
     },
   });
+  console.log("DATA FROM API CLOUDINARY =>", data);
   return data;
 };

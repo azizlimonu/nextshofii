@@ -46,12 +46,10 @@ const ProductCard = ({ product }) => {
           <ProductSwiper images={images} />
         </Link>
 
-        {product.subProducts[active].discount ? (
+        {product.subProducts[active].discount > 1 && (
           <div className={styles.product__discount}>
             -{product.subProducts[active].discount}%
           </div>
-        ) : (
-          ""
         )}
 
         <div className={styles.product__infos}>
