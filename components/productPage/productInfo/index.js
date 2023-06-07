@@ -12,6 +12,11 @@ import { BsHandbagFill, BsHeart } from "react-icons/bs";
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart, updateCart } from '../../../store/cartSlice';
+import { signIn, useSession } from 'next-auth/react';
+import { showDialog } from '../../../store/dialogSlice';
+import { toast } from 'react-toastify';
+import DialogModal from '../../dialogmodal';
+import DotLoaders from '../../loaders/DotLoaders';
 
 const ProductInfo = ({ product, setActiveImage }) => {
   const router = useRouter();
@@ -19,6 +24,8 @@ const ProductInfo = ({ product, setActiveImage }) => {
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { data: session } = useSession();
 
   const { cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
@@ -40,50 +47,120 @@ const ProductInfo = ({ product, setActiveImage }) => {
 
   // ========================== >
   const addToCartHandler = async () => {
-    if (!router.query.size) {
-      setError("Please Select a size");
-      return;
-    }
-    const { data } = await axios.get(
-      `/api/product/${product._id}?style=${product.style}&size=${router.query.size}`
-    );
-    // console.log("data =>", data);
-    if (qty > data.quantity) {
-      setError(
-        "The Quantity you have choosed is more than in stock. Try and lower the Qty"
-      );
-    } else if (data.quantity < 1) {
-      setError("This Product is out of stock.");
-      return;
-    } else {
-      // create some unique id for the product with the same style and size to prevent duplicate
-      let _uid = `${data._id}_${product.style}_${router.query.size}`;
-      let exist = cart.cartItems.find((p) => p._uid === _uid);
-      if (exist) {
-        let newCart = cart.cartItems.map((product) => {
-          if (product._uid == exist._uid) {
-            return {
-              ...product, qty: qty
-            };
-          }
-          return product;
-        });
-        dispatch(updateCart(newCart));
-      } else {
-        dispatch(addToCart({
-          ...data,
-          qty,
-          size: data.size,
-          _uid
-        }))
+    setLoading(true);
+    try {
+      if (!router.query.size) {
+        setError("Please Select a size");
+        return;
       }
+      const { data } = await axios.get(
+        `/api/product/${product._id}?style=${product.style}&size=${router.query.size}`
+      );
+      // console.log("data =>", data);
+      if (qty > data.quantity) {
+        setError(
+          "The Quantity you have choosed is more than in stock. Try and lower the Qty"
+        );
+      } else if (data.quantity < 1) {
+        setError("This Product is out of stock.");
+        return;
+      } else {
+        // create some unique id for the product with the same style and size to prevent duplicate
+        let _uid = `${data._id}_${product.style}_${router.query.size}`;
+        let exist = cart.cartItems.find((p) => p._uid === _uid);
+        if (exist) {
+          let newCart = cart.cartItems.map((product) => {
+            if (product._uid == exist._uid) {
+              return {
+                ...product, qty: qty
+              };
+            }
+            return product;
+          });
+          dispatch(updateCart(newCart));
+        } else {
+          dispatch(addToCart({
+            ...data,
+            qty,
+            size: data.size,
+            _uid
+          }))
+        }
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
     }
-  }
+    setLoading(false);
+  };
   // ========================== >
+
+  const wishlistHandler = async () => {
+    setLoading(true);
+    try {
+      if (!session) {
+        return signIn();
+      }
+      if (!router.query.size || !router.query.style) {
+        setError("Please Select a size and style");
+        dispatch(
+          showDialog({
+            header: "Please select size and style",
+            messages: [
+              {
+                msg: "Choose your size and your style",
+                type: "error",
+              },
+            ],
+          })
+        );
+        setLoading(false);
+        return;
+      }
+
+      const { data } = await axios.put('/api/user/wishlist', {
+        product_id: product._id,
+        style: product.style,
+        size: router.query.size
+      });
+
+      dispatch(
+        showDialog({
+          header: "Product Added to Whishlist Successfully",
+          messages: [
+            {
+              msg: data.message,
+              type: "success",
+            },
+          ],
+        })
+      );
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+
+      dispatch(
+        showDialog({
+          header: "Wishlist Error",
+          messages: [
+            {
+              msg: error.message,
+              type: "error",
+            },
+          ],
+        })
+      );
+    }
+    setLoading(false);
+  };
 
   return (
     <div className={styles.infos}>
-      {/* dialog modal */}
+      <DialogModal />
+      {loading && <DotLoaders loading={loading} />}
+
       <div className={styles.infos__container}>
         <h1 className={styles.infos__name}>{product.name}</h1>
 
@@ -194,12 +271,14 @@ const ProductInfo = ({ product, setActiveImage }) => {
         </div>
 
         <div className={styles.infos__actions}>
-          <button onClick={() => addToCartHandler()}>
+          <button
+            onClick={() => addToCartHandler()}
+          >
             <BsHandbagFill />
             <b>ADD TO CART</b>
           </button>
 
-          <button onClick={() => console.log("Add To Wishlist")}>
+          <button onClick={() => wishlistHandler()}>
             <BsHeart />
             ADD TO WISHLIST
           </button>
