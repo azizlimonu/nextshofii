@@ -139,14 +139,14 @@ const ProductInfo = ({ product, setActiveImage }) => {
 
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error(error.response.data.message);
 
       dispatch(
         showDialog({
           header: "Wishlist Error",
           messages: [
             {
-              msg: error.message,
+              msg: error.response.data.message,
               type: "error",
             },
           ],

@@ -13,9 +13,8 @@ handler.put(async (req, res) => {
     const user = await User.findById(req.user);
 
     const existingWishlist = user.wishList.find(
-      (x) => x.product === product_id && x.style === style
+      (x) => x.product.toString() === product_id && x.style === style
     );
-
     if (existingWishlist) {
       await db.disconnectDb();
       return res
@@ -31,8 +30,7 @@ handler.put(async (req, res) => {
           },
         },
       });
-      await user.save(); 
-      console.log(user);
+      await user.save();
       await db.disconnectDb();
       return res
         .status(200)
