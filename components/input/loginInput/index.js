@@ -5,8 +5,8 @@ import { BiUser } from 'react-icons/bi';
 import { SiMinutemailer } from "react-icons/si";
 import { IoKeyOutline } from "react-icons/io5";
 
-const LoginInput = ({ icon, placeholder, ...props }) => {
-  const [field, meta] = useField(props);
+const LoginInput = ({ icon, placeholder, name, ...props }) => {
+  const [field, meta] = useField({ name: name, ...props });
 
   return (
     <div

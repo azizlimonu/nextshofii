@@ -25,6 +25,7 @@ const CheckoutShipping = ({
   user,
   addresses,
   setAddresses,
+  profile
 }) => {
   const initialValues = {
     firstName: "",
@@ -118,6 +119,11 @@ const CheckoutShipping = ({
 
   return (
     <div className={styles.shipping}>
+      {!profile && (
+        <div className={styles.header}>
+          <h3>Shipping Informations</h3>
+        </div>
+      )}
       <div className={styles.addresses}>
         {addresses?.map((address, i) => (
           <div key={i} style={{ position: "relative" }}>
@@ -133,7 +139,7 @@ const CheckoutShipping = ({
               onClick={() => changeActiveHandler(address._id)}
             >
               <div className={styles.address__side}>
-                <img src={user.image} alt="" />
+                <img src={profile ? user.user.image : user.image} alt="" />
               </div>
 
               <div className={styles.address__col}>
