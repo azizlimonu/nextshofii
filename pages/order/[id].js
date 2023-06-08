@@ -324,9 +324,9 @@ export async function getServerSideProps(context) {
     .lean();
 
   const session = await getSession(context);
-  const user = await User.findById(session.user.id).select("-password");
-
-  if (order.user._id != user._id || user.role != "admin") {
+  const user = await User.findById(session.user.id)
+  
+  if (order.user._id.toString() !== user._id.toString() && user.role !== "admin") {
     return {
       redirect: {
         destination: "/",

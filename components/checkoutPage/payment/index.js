@@ -2,12 +2,14 @@ import React from 'react';
 import { paymentMethods } from '../../../data/paymentMethod';
 import styles from "./styles.module.scss";
 
-const CheckoutPayment = ({ paymentMethod, setPaymentMethod }) => {
+const CheckoutPayment = ({ paymentMethod, setPaymentMethod, profile }) => {
   return (
     <div className={styles.payment}>
-      <div className={styles.header}>
-        <h3>Payment Method</h3>
-      </div>
+      {!profile && (
+        <div className={styles.header}>
+          <h3>Payment Method</h3>
+        </div>
+      )}
 
       {paymentMethods.map((item, i) => (
         <label
@@ -31,7 +33,7 @@ const CheckoutPayment = ({ paymentMethod, setPaymentMethod }) => {
           />
 
           <img
-            src={`./images/checkout/${item.id}.webp`}
+            src={`/images/checkout/${item.id}.webp`}
             alt={item.name}
           />
 
@@ -42,7 +44,7 @@ const CheckoutPayment = ({ paymentMethod, setPaymentMethod }) => {
                 ? item.images.map((img, i) => (
                   <img
                     key={i}
-                    src={`./images/payment/${img}.webp`}
+                    src={`/images/payment/${img}.webp`}
                     alt=""
                   />
                 ))

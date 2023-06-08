@@ -3,6 +3,7 @@ import { getSession } from "next-auth/react";
 import ProfileLayout from '../../components/profile/profileLayout';
 
 const ProfilePage = ({ user, tab }) => {
+  
   return (
     <ProfileLayout session={user.user} tab={tab} />
   )

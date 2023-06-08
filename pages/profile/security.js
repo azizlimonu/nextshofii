@@ -41,15 +41,18 @@ const ProfileSecurity = ({ user, tab }) => {
         password,
       });
       setError("");
+      setCurrent_password("");
+      setPassword("");
+      setConf_password("");
       setSuccess(data.message);
     } catch (error) {
       setSuccess("");
-      setError(error.response.data.message);
+      setError(error);
     }
   };
 
   return (
-    <ProfileLayout>
+    <ProfileLayout session={user.user} tab={tab}>
       <Head>
         <title>Profile - Security</title>
       </Head>
@@ -110,6 +113,7 @@ export default ProfileSecurity;
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   const session = await getSession({ req });
+
   const tab = query.tab || 0;
 
   if (!session) {

@@ -12,6 +12,7 @@ import slugify from "slugify";
 
 const ProfileOrders = ({ user, tab, orders }) => {
   const router = useRouter();
+  console.log("ORDER PRODUCT", orders);
 
   return (
     <ProfileLayout session={user.user} tab={tab}>
@@ -69,10 +70,19 @@ const ProfileOrders = ({ user, tab, orders }) => {
                 <td>{order._id}</td>
 
                 <td className={styles.orders__images}>
-                  {order.products.map((p) => (
-                    <img src={p.image} key={p._id} alt="" />
-                  ))}
-                </td>
+                  {order.products.length > 3 ? (
+                    <>
+                      {order.products.slice(0, 3).map((p, idx) => (
+                        <img src={p.image} key={idx} alt="" />
+                      ))}
+                      <p>...</p>
+                    </>
+                  ) : (
+                    order.products.map((p) => (
+                      <img src={p.image} key={p._id} alt="" />
+                    ))
+                  )}
+                </td> 
 
                 <td>
                   {order.paymentMethod == "paypal"
@@ -86,9 +96,9 @@ const ProfileOrders = ({ user, tab, orders }) => {
 
                 <td className={styles.orders__paid}>
                   {order.isPaid ? (
-                    <img src="../../../images/verified.png" alt="" />
+                    <img src="/images/verified.png" alt="" />
                   ) : (
-                    <img src="../../../images/unverified.png" alt="" />
+                    <img src="/images/unverified.png" alt="" />
                   )}
                 </td>
 

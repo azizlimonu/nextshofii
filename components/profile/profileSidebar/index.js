@@ -4,7 +4,6 @@ import { sidebarData } from '../../../data/profile';
 import ListSidebar from './ListSidebar';
 
 const ProfileSidebar = ({ data }) => {
-  console.log("DATA PROFILE SIDEBAR", data);
 
   return (
     <div className={styles.sidebar}>
@@ -13,12 +12,12 @@ const ProfileSidebar = ({ data }) => {
         <span className={styles.sidebar__name}>{data.name}</span>
 
         <ul>
-          {sidebarData.map((item, i) => (
+          {sidebarData.map((item, idx) => (
             <ListSidebar
-              key={i}
+              key={idx}
               item={item}
-              visible={data.tab == i.toString()}
-              index={i.toString()}
+              visible={data.tab == idx.toString()}
+              index={idx.toString()}
             />
           ))}
         </ul>

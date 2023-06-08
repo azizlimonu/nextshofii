@@ -6,22 +6,22 @@ import Link from "next/link";
 import slugify from "slugify";
 import styles from './style.module.scss';
 
-const ListSidebar = (item, visible, index) => {
+const ListSidebar = ({ item, visible, index }) => {
   const [show, setShow] = useState(visible);
   const router = useRouter();
-  console.log('item that pass', item);
+
   return (
     <li>
-      {item.item.heading == "Sign out" ? (
+      {item.heading == "Sign out" ? (
         <b onClick={() => signOut()}>Sign out</b>
       ) : (
         <b onClick={() => setShow((prev) => !prev)}>
-          {item.item.heading} {show ? <HiMinusSm /> : <HiPlusSm />}
+          {item.heading} {show ? <HiMinusSm /> : <HiPlusSm />}
         </b>
       )}
       {show && (
         <ul>
-          {item.item.links?.map((link, i) => (
+          {item.links?.map((link, i) => (
             <>
               {link.link.startsWith("/profile/orders") ? (
                 <li
