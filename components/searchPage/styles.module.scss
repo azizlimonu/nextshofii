@@ -1,0 +1,59 @@
+.filter {
+  padding: 1rem;
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 10px;
+    span {
+      svg {
+        fill: #333;
+        width: 10px;
+      }
+    }
+  }
+  section {
+    div {
+      margin-left: 1rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      span {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        svg {
+          width: 10px;
+          fill: #333;
+        }
+      }
+    }
+  }
+   &__sizes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 10px;
+    &_size {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    label {
+      font-size: 15px;
+    }
+  }
+}
+.activeFilter {
+  border: 1px solid #222;
+}
+.activeFilterColor {
+  outline: 1px solid #000;
+  outline-offset: 3px;
+}
