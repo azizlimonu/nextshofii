@@ -10,7 +10,6 @@ const CategoryFilter = ({
   categoryHandler,
   replaceQuery,
 }) => {
-  console.log(categories);
 
   const [show, setShow] = useState(true);
 

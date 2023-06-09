@@ -12,20 +12,22 @@ import { useRouter } from "next/router";
 import ProductCard from '../components/productCard';
 import CategoryFilter from '../components/searchPage/categoryFilter';
 import SizesFilter from '../components/searchPage/sizesFilter';
+import ColorsFilter from '../components/searchPage/colorsFilter';
+import BrandsFilter from '../components/searchPage/brandsFilter';
+import StylesFilter from '../components/searchPage/stylesFilter';
 
 const SearchPage = ({
   categories,
   products,
   subCategories,
-  sizes
+  sizes,
+  colors,
+  brands,
+  stylesData,
+  patterns,
+  materials,
 }) => {
-  console.log(sizes);
-
   const router = useRouter();
-
-  const replaceQuery = (queryName, value) => {
-
-  };
 
   const categoryHandler = (category) => {
 
@@ -34,6 +36,45 @@ const SearchPage = ({
   const sizeHandler = (size) => {
 
   };
+
+  const colorHandler = (color) => {
+
+  };
+
+  const brandHandler = (brand) => {
+
+  };
+
+  const styleHandler = (style) => {
+
+  };
+
+  const patternHandler = (pattern) => {
+
+  };
+
+  const materialHandler = (material) => {
+
+  };
+
+  const genderHandler = (gender) => {
+
+  };
+  const priceHandler = (price, type) => {
+
+  };
+  const pageHandler = (e, page) => {
+
+  };
+
+  const checkChecked = (sort) => {
+
+  };
+
+  const replaceQuery = (queryName, value) => {
+
+  };
+
 
   return (
     <div className={styles.browse__container}>
@@ -73,9 +114,26 @@ const SearchPage = ({
           <SizesFilter sizes={sizes} sizeHandler={sizeHandler} />
 
           {/* Colors Filter */}
-          
+          <ColorsFilter
+            colors={colors}
+            colorHandler={colorHandler}
+            replaceQuery={replaceQuery}
+          />
+
           {/* Brands Filter */}
+          <BrandsFilter
+            brands={brands}
+            brandHandler={brandHandler}
+            replaceQuery={replaceQuery}
+          />
+
           {/* Styles Filter */}
+          <StylesFilter
+            data={stylesData}
+            styleHandler={styleHandler}
+            replaceQuery={replaceQuery}
+          />
+
           {/* Patterns Filter */}
           {/* Materials Filter */}
           {/* Genders Filter */}
@@ -105,7 +163,6 @@ export async function getServerSideProps(context) {
   // get query
   const { query } = context;
   const sortQuery = query.sort || "";
-
 
   // ====> Get data From Db <==== //
   db.connectDb();
@@ -147,6 +204,11 @@ export async function getServerSideProps(context) {
       products: JSON.parse(JSON.stringify(products)),
       subCategories: JSON.parse(JSON.stringify(subCategories)),
       sizes,
+      colors,
+      brands,
+      stylesData: styles,
+      patterns,
+      materials,
     }
   };
 };

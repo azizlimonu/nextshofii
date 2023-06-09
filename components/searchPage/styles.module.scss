@@ -49,6 +49,45 @@
       font-size: 15px;
     }
   }
+   &__colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      &:hover {
+        outline: 1px solid #000;
+        outline-offset: 3px;
+      }
+    }
+  }
+  &__brand {
+    background: transparent;
+    width: 100px;
+    height: 37px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #222;
+    &:hover {
+      border: 1px solid #000;
+    }
+    img {
+      height: 29px;
+      object-fit: contain;
+    }
+  }
 }
 .activeFilter {
   border: 1px solid #222;
