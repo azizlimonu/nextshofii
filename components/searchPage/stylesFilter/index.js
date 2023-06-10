@@ -33,7 +33,7 @@ const StylesFilter = ({
               <div
                 key={i}
                 className={styles.filter__sizes_size}
-                onClick={() => styleHandler(check.result)}
+                onClick={() => styleHandler(existedStyle ?`${existedStyle}_${style}` : style)}
               >
                 <input
                   type="checkbox"

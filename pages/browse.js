@@ -20,6 +20,7 @@ import GendersFilter from '../components/searchPage/genderFilter';
 import MaterialsFilter from '../components/searchPage/materialsFilter';
 import HeadingFilters from '../components/searchPage/headingFilter';
 import Layout from '../components/layout/Layout';
+import { createRegex } from '../utils/regex';
 
 const SearchPage = ({
   categories,
@@ -260,7 +261,6 @@ export async function getServerSideProps(context) {
   const { query } = context;
   const searchQuery = query.search || "";
   const categoryQuery = query.category || "";
-  const brandQuery = query.brand || "";
   const genderQuery = query.gender || "";
   const priceQuery = query.price?.split("_") || "";
   const shippingQuery = query.shipping || 0;
@@ -268,6 +268,16 @@ export async function getServerSideProps(context) {
   const sortQuery = query.sort || "";
   const pageSize = 50;
   const page = query.page || 1;
+
+  // Brand Filter query, array, regex => filter multiply
+  const brandQuery = query.brand?.split("_") || "";
+  const brandRegex = `^${brandQuery[0]}`;
+  const brandSearchRegex = createRegex(brandQuery, brandRegex);
+
+  // Style Filter query, array, regex => filter multiply
+  const styleQuery = query.style?.split("_") || "";
+  const styleRegex = `^${styleQuery[0]}`;
+  const styleSearchRegex = createRegex(styleQuery, styleRegex);
 
   // search query
   const search =
@@ -287,7 +297,22 @@ export async function getServerSideProps(context) {
 
   const brand =
     brandQuery && brandQuery !== ""
-      ? { brand: brandQuery }
+      ? {
+        brand: {
+          $regex: styleRegex,
+          $options: "i",
+        },
+      }
+      : {};
+
+  const style =
+    styleQuery && styleQuery !== ""
+      ? {
+        "details.value": {
+          $regex: styleSearchRegex,
+          $options: "i",
+        },
+      }
       : {};
 
   // ====> Get data From Db <==== //
@@ -295,7 +320,8 @@ export async function getServerSideProps(context) {
   let productsDb = await Product.find({
     ...search,
     ...category,
-    ...brand
+    ...brand,
+    ...style
   })
     .sort()
     .lean();
