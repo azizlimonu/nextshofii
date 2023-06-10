@@ -10,6 +10,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import Layout from '../../components/layout/Layout';
 
 const Forgot = () => {
   const [email, setEmail] = useState("");
@@ -45,46 +46,48 @@ const Forgot = () => {
   return (
     <>
       {loading && <DotLoaders loading={loading} />}
-      <div className={styles.forgot}>
-        <div>
-          <div className={styles.forgot__header}>
-            <div className={styles.back__svg}>
-              <BiLeftArrowAlt />
+      <Layout>
+        <div className={styles.forgot}>
+          <div>
+            <div className={styles.forgot__header}>
+              <div className={styles.back__svg}>
+                <BiLeftArrowAlt />
+              </div>
+              <span>
+                Forgot your password ? <Link href="/">Login instead</Link>
+              </span>
             </div>
-            <span>
-              Forgot your password ? <Link href="/">Login instead</Link>
-            </span>
-          </div>
-          <Formik
-            enableReinitialize
-            initialValues={{
-              email,
-            }}
-            validationSchema={emailValidation}
-            onSubmit={() => {
-              forgotHandler();
-            }}
-          >
-            {(form) => (
-              <Form>
-                <LoginInput
-                  type="text"
-                  name="email"
-                  icon="email"
-                  placeholder="Email Address"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+            <Formik
+              enableReinitialize
+              initialValues={{
+                email,
+              }}
+              validationSchema={emailValidation}
+              onSubmit={() => {
+                forgotHandler();
+              }}
+            >
+              {(form) => (
+                <Form>
+                  <LoginInput
+                    type="text"
+                    name="email"
+                    icon="email"
+                    placeholder="Email Address"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
 
-                <CircledIconBtn type="submit" text="Send link" />
-                <div style={{ marginTop: "10px" }}>
-                  {error && <span className={styles.error}>{error}</span>}
-                  {success && <span className={styles.success}>{success}</span>}
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  <CircledIconBtn type="submit" text="Send link" />
+                  <div style={{ marginTop: "10px" }}>
+                    {error && <span className={styles.error}>{error}</span>}
+                    {success && <span className={styles.success}>{success}</span>}
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </div>
+      </Layout>
     </>
   )
 }

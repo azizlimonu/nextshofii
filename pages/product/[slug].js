@@ -12,6 +12,7 @@ import ProductSwiper from '../../components/productPage/productSwiper';
 
 import Head from "next/head";
 import { useState } from "react";
+import Layout from "../../components/layout/Layout";
 
 export default function ProductPage({ product }) {
   const [activeImage, setActiveImage] = useState("");
@@ -23,26 +24,28 @@ export default function ProductPage({ product }) {
         <title>{product.name}</title>
       </Head>
 
-      <div className={styles.product}>
-        <div className={styles.product__container}>
+      <Layout>
+        <div className={styles.product}>
+          <div className={styles.product__container}>
 
-          <div className={styles.path}>
-            Home / {product.category.name}
-            {product.subCategories.map((sub, i) => (
-              <span key={i}>/{sub.name}</span>
-            ))}
+            <div className={styles.path}>
+              Home / {product.category.name}
+              {product.subCategories.map((sub, i) => (
+                <span key={i}>/{sub.name}</span>
+              ))}
+            </div>
+
+            <div className={styles.product__main}>
+              <ProductSwiper images={product.images} activeImage={activeImage} />
+              <ProductInfo product={product} setActiveImage={setActiveImage} />
+            </div>
+
+            <Reviews product={product} />
+
+            {/* Related Product */}
           </div>
-
-          <div className={styles.product__main}>
-            <ProductSwiper images={product.images} activeImage={activeImage} />
-            <ProductInfo product={product} setActiveImage={setActiveImage} />
-          </div>
-
-          <Reviews product={product} />
-
-          {/* Related Product */}
         </div>
-      </div>
+      </Layout>
     </>
   );
 }

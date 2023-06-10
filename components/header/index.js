@@ -1,14 +1,13 @@
 import styles from './header.module.scss';
-import Ads from './Ad1'
 import { Top } from './Top';
 import Main from './Main';
 
-export default function Header ({ country }) {
+export default function Header({ searchHandler, country }) {
+
   return (
     <header className={styles.header}>
-      {/* <Ads /> */}
       <Top country={country} />
-      <Main />
+      <Main searchHandler={searchHandler} />
     </header>
   )
 }

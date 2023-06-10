@@ -3,14 +3,14 @@ import Header from '../header';
 import Footer from '../footer';
 import { useRouter } from 'next/router';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, searchHandler }) => {
+  const router = useRouter();
+  const isInsideAdminPath = router.pathname.startsWith('/admin');
+
   const country = {
     name: "Indonesia",
     flag: "https://cdn.ipregistry.co/flags/emojitwo/id.svg"
   };
-
-  const router = useRouter();
-  const isInsideAdminPath = router.pathname.startsWith('/admin');
 
   return (
     <>
@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
         </>
       ) : (
         <>
-          <Header country={country} />
+          <Header country={country} searchHandler={searchHandler} />
           {children}
           <Footer country={country} />
         </>

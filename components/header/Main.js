@@ -3,9 +3,27 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import styles from './header.module.scss';
 import { RiSearch2Fill, RiShoppingCartLine } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
+import { useRouter } from "next/router";
 
-const Main = () => {
-  const [query, setQuery] = useState("");
+
+const Main = ({ searchHandler }) => {
+  const router = useRouter();
+  const [query, setQuery] = useState(router.query.search || "");
+  const { cart } = useSelector((state) => ({ ...state }));
+
+  const cartLength = cart.cartItems.length
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (router.pathname !== "/browse") {
+      if (query.length > 1) {
+        router.push(`/browse?search=${query}`);
+      }
+    } else {
+      searchHandler(query);
+    }
+  };
 
   return (
     <div className={styles.main}>
@@ -19,11 +37,12 @@ const Main = () => {
           />
         </Link>
 
-        <form className={styles.search}>
+        <form onSubmit={(e) => handleSearch(e)} className={styles.search}>
           <input
             type='text'
             placeholder='Search...'
             value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button type='submit' className={styles.search__icon}>
             <RiSearch2Fill />
@@ -32,7 +51,7 @@ const Main = () => {
 
         <Link href='/' className={styles.cart}>
           <RiShoppingCartLine />
-          <span>0</span>
+          <span>{cartLength}</span>
         </Link>
       </div>
     </div>

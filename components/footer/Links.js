@@ -81,9 +81,9 @@ const Links = () => {
         <ul key={idx}>
           {idx === 0 ? (
             <Image
-              src='/logo.png'
-              alt='logo'
-              width={100}
+              src="/logo copy.png"
+              alt=''
+              width={150}
               height={70}
             />
           ) : (

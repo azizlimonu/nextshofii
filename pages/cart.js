@@ -14,6 +14,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import Layout from '../components/layout/Layout';
 
 
 const Cart = () => {
@@ -67,42 +68,44 @@ const Cart = () => {
 
   return (
     <>
-      <div className={styles.cart}>
+      <Layout>
+        <div className={styles.cart}>
 
-        {cart.cartItems.length > 0 ? (
-          <div className={styles.cart__container}>
-            <HeaderCart
-              cartItems={cart.cartItems}
-              selected={selected}
-              setSelected={setSelected}
-            />
+          {cart.cartItems.length > 0 ? (
+            <div className={styles.cart__container}>
+              <HeaderCart
+                cartItems={cart.cartItems}
+                selected={selected}
+                setSelected={setSelected}
+              />
 
-            <div className={styles.cart__products}>
-              {cart.cartItems.map((product) => (
-                <CartProduct
-                  key={product._uid}
-                  product={product}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-              ))}
+              <div className={styles.cart__products}>
+                {cart.cartItems.map((product) => (
+                  <CartProduct
+                    key={product._uid}
+                    product={product}
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
+                ))}
+              </div>
+
+              <CartCheckout
+                total={total}
+                subtotal={subtotal}
+                selected={selected}
+                shippingFee={shippingFee}
+                saveCartToDbHandler={saveCartToDbHandler}
+              />
+
+              <CartPayment />
+
             </div>
-
-            <CartCheckout
-              total={total}
-              subtotal={subtotal}
-              selected={selected}
-              shippingFee={shippingFee}
-              saveCartToDbHandler={saveCartToDbHandler}
-            />
-
-            <CartPayment />
-
-          </div>
-        ) : (
-          <CartEmpty />
-        )}
-      </div>
+          ) : (
+            <CartEmpty />
+          )}
+        </div>
+      </Layout>
     </>
   )
 }

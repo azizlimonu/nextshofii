@@ -14,6 +14,7 @@ import Link from "next/link";
 import axios from "axios";
 import { getSession, signIn } from "next-auth/react";
 import jwt from "jsonwebtoken";
+import Layout from '../../../components/layout/Layout';
 
 export default function Reset({ user_id }) {
   // console.log("user_id", user_id);
@@ -58,55 +59,55 @@ export default function Reset({ user_id }) {
   return (
     <>
       {loading && <DotLoaders loading={loading} />}
-      <Header country="" />
-      <div className={styles.forgot}>
-        <div>
-          <div className={styles.forgot__header}>
-            <div className={styles.back__svg}>
-              <BiLeftArrowAlt />
+      <Layout>
+        <div className={styles.forgot}>
+          <div>
+            <div className={styles.forgot__header}>
+              <div className={styles.back__svg}>
+                <BiLeftArrowAlt />
+              </div>
+              <span>
+                Reset your password ? <Link href="/">Login instead</Link>
+              </span>
             </div>
-            <span>
-              Reset your password ? <Link href="/">Login instead</Link>
-            </span>
-          </div>
-          <Formik
-            enableReinitialize
-            initialValues={{
-              password,
-              conf_password,
-            }}
-            validationSchema={passwordValidation}
-            onSubmit={() => {
-              resetHandler();
-            }}
-          >
-            {(form) => (
-              <Form>
-                <LoginInput
-                  type="password"
-                  name="password"
-                  icon="password"
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <LoginInput
-                  type="password"
-                  name="conf_password"
-                  icon="password"
-                  placeholder="Confirm Password"
-                  onChange={(e) => setConf_password(e.target.value)}
-                />
+            <Formik
+              enableReinitialize
+              initialValues={{
+                password,
+                conf_password,
+              }}
+              validationSchema={passwordValidation}
+              onSubmit={() => {
+                resetHandler();
+              }}
+            >
+              {(form) => (
+                <Form>
+                  <LoginInput
+                    type="password"
+                    name="password"
+                    icon="password"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <LoginInput
+                    type="password"
+                    name="conf_password"
+                    icon="password"
+                    placeholder="Confirm Password"
+                    onChange={(e) => setConf_password(e.target.value)}
+                  />
 
-                <CircledIconBtn type="submit" text="Submit" />
-                <div style={{ marginTop: "10px" }}>
-                  {error && <span className={styles.error}>{error}</span>}
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  <CircledIconBtn type="submit" text="Submit" />
+                  <div style={{ marginTop: "10px" }}>
+                    {error && <span className={styles.error}>{error}</span>}
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </div>
-      <Footer country="" />
+      </Layout>
     </>
   );
 }

@@ -10,6 +10,7 @@ import CheckoutSummary from '../components/checkoutPage/summary';
 import db from '../utils/db';
 import User from '../models/UserModel';
 import Cart from '../models/CartModel';
+import Layout from '../components/layout/Layout';
 
 const Checkout = ({ cart, user }) => {
   const [addresses, setAddresses] = useState(user?.address || []);
@@ -27,33 +28,35 @@ const Checkout = ({ cart, user }) => {
   }, [addresses]);
 
   return (
-    <div className={`${styles.container} ${styles.checkout}`}>
-      <div className={styles.checkout__side}>
+    <Layout>
+      <div className={`${styles.container} ${styles.checkout}`}>
+        <div className={styles.checkout__side}>
 
-        <CheckoutShipping
-          user={user}
-          addresses={addresses}
-          setAddresses={setAddresses}
-        />
+          <CheckoutShipping
+            user={user}
+            addresses={addresses}
+            setAddresses={setAddresses}
+          />
 
-        <CheckoutProduct cart={cart} />
+          <CheckoutProduct cart={cart} />
+        </div>
+
+        <div className={styles.checkout__side}>
+          <CheckoutPayment
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
+          <CheckoutSummary
+            totalAfterDiscount={totalAfterDiscount}
+            setTotalAfterDiscount={setTotalAfterDiscount}
+            user={user}
+            cart={cart}
+            paymentMethod={paymentMethod}
+            selectedAddress={selectedAddress}
+          />
+        </div>
       </div>
-
-      <div className={styles.checkout__side}>
-        <CheckoutPayment
-          paymentMethod={paymentMethod}
-          setPaymentMethod={setPaymentMethod}
-        />
-        <CheckoutSummary
-          totalAfterDiscount={totalAfterDiscount}
-          setTotalAfterDiscount={setTotalAfterDiscount}
-          user={user}
-          cart={cart}
-          paymentMethod={paymentMethod}
-          selectedAddress={selectedAddress}
-        />
-      </div>
-    </div>
+    </Layout>
   )
 }
 

@@ -30,7 +30,7 @@ const Copyright = ({ country }) => {
   return (
     <div className={styles.footer__copyright}>
       <section>
-        @2022 ShoppAyAll Rights Resereved
+        @2022 Shofii Rights Resereved
       </section>
 
       <section>

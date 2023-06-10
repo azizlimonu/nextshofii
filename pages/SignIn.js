@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import axios from 'axios';
 import { useState } from 'react';
 import DotLoaders from '../components/loaders/DotLoaders';
+import Layout from '../components/layout/Layout';
 
 
 const Signin = ({ providers, callbackUrl, csrfToken }) => {
@@ -143,7 +144,8 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
   return (
     <>
       {loading && <DotLoaders loading={loading} />}
-      <div className={styles.login}>
+      <Layout>
+        <div className={styles.login}>
         <div className={styles.login__container}>
           <div className={styles.login__header}>
             <div className={styles.back__svg}>
@@ -293,6 +295,7 @@ const Signin = ({ providers, callbackUrl, csrfToken }) => {
           </div>
         </div>
       </div>
+      </Layout>
     </>
   )
 }

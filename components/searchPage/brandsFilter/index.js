@@ -2,11 +2,12 @@ import { useState } from 'react';
 import styles from '../styles.module.scss';
 import { BsPlusLg } from "react-icons/bs";
 import { FaMinus } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const BrandsFilter = ({
   brands, brandHandler, replaceQuery
 }) => {
-
+  const router = useRouter();
   const [show, setShow] = useState(true);
 
   return (
@@ -23,19 +24,19 @@ const BrandsFilter = ({
       </h3>
 
       {show && (
-        <div>
+        <div className={styles.filter__sizes}>
           {brands.map((brand, i) => {
             // const check = replaceQuery("brand", brand);
             const check = false;
             return (
-              <button
+              <div
                 key={i}
                 className={`${styles.filter__brand} ${check.active ? styles.activeFilter : ""
                   }`}
-                onClick={() => brandHandler(check.result)}
+                onClick={() => brandHandler(brand)}
               >
                 <img src={`/images/brands/${brand}.png`} alt="" />
-              </button>
+              </div>
             );
           })}
         </div>
