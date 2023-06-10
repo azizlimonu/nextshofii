@@ -8,11 +8,11 @@
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
     &_filters {
       position: relative;
       width: 100%;
-      height: 100vh;
+      height: 150vh;
       overflow-y: auto;
       text-align: center;
       padding-top: 1rem;
@@ -46,7 +46,7 @@
     }
   }
   &__path {
-    padding: 2rem 0;
+    padding: 1rem 0;
     color: #777;
   }
   &__tags {

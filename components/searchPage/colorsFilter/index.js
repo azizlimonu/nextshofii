@@ -7,6 +7,7 @@ import { BsPlusLg } from 'react-icons/bs';
 const ColorsFilter = ({ colors, colorHandler, replaceQuery }) => {
   const router = useRouter();
   const [show, setShow] = useState(true);
+  const existedColor = router.query.color || "";
 
   return (
     <div className={styles.filter}>
@@ -26,10 +27,9 @@ const ColorsFilter = ({ colors, colorHandler, replaceQuery }) => {
                 <button
                   style={{ background: `${color}` }}
                   className={check.active ? styles.activeFilterColor : ""}
-                  onClick={() => colorHandler(check.result)}
+                  onClick={() => colorHandler(existedColor ? `${existedColor}_${color}` : color)}
                   key={i}
                 >
-
                 </button>
               )
             })}

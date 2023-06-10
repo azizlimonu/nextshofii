@@ -7,6 +7,7 @@ import { BsPlusLg } from 'react-icons/bs';
 const PatternsFilter = ({ patterns, patternHandler, replaceQuery, }) => {
   const router = useRouter();
   const [show, setShow] = useState(true);
+  const existedPattern = router.query.pattern || "";
 
   return (
     <div className={styles.filter}>
@@ -28,7 +29,7 @@ const PatternsFilter = ({ patterns, patternHandler, replaceQuery, }) => {
                 key={i}
                 htmlFor={pattern}
                 className={styles.filter__sizes_size}
-                onClick={() => patternHandler(check.result)}
+                onClick={() => patternHandler(existedPattern ? `${existedPattern}_${pattern}` : pattern)}
               >
                 <input
                   type="checkbox"

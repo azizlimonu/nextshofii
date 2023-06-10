@@ -35,6 +35,8 @@ const SearchPage = ({
 }) => {
   const router = useRouter();
 
+  console.log("PRODUCTS", products);
+
   const filter = ({
     search,
     category,
@@ -113,10 +115,6 @@ const SearchPage = ({
 
   };
 
-  const checkChecked = (sort) => {
-
-  };
-
   const replaceQuery = (queryName, value) => {
 
   };
@@ -134,6 +132,10 @@ const SearchPage = ({
   };
 
   const sortHandler = (sort) => {
+
+  };
+
+  const checkChecked = (sort) => {
 
   };
 
@@ -155,13 +157,6 @@ const SearchPage = ({
         <div className={styles.browse__container}>
           <div>
             <div className={styles.browse__path}>Home / Browse</div>
-            <div className={styles.browse__tags}>
-              {categories.map((c) => (
-                <Link href="" key={c._id}>
-                  {c.name}
-                </Link>
-              ))}
-            </div>
           </div>
 
           <div
@@ -257,7 +252,7 @@ const SearchPage = ({
 export default SearchPage;
 
 export async function getServerSideProps(context) {
-  // get query
+  // Single query
   const { query } = context;
   const searchQuery = query.search || "";
   const categoryQuery = query.category || "";
@@ -269,6 +264,7 @@ export async function getServerSideProps(context) {
   const pageSize = 50;
   const page = query.page || 1;
 
+  // Multiple Query
   // Brand Filter query, array, regex => filter multiply
   const brandQuery = query.brand?.split("_") || "";
   const brandRegex = `^${brandQuery[0]}`;
@@ -279,7 +275,27 @@ export async function getServerSideProps(context) {
   const styleRegex = `^${styleQuery[0]}`;
   const styleSearchRegex = createRegex(styleQuery, styleRegex);
 
-  // search query
+  // Size Filter query, array, regex => filter multiply
+  const sizeQuery = query.size?.split("_") || "";
+  const sizeRegex = `^${sizeQuery[0]}`;
+  const sizeSearchRegex = createRegex(sizeQuery, sizeRegex);
+
+  // Color Filter query, array, regex => filter multiply
+  const colorQuery = query.color?.split("_") || "";
+  const colorRegex = `^${colorQuery[0]}`;
+  const colorSearchRegex = createRegex(colorQuery, colorRegex);
+
+  // Pattern Filter query, array, regex => filter multiply
+  const patternQuery = query.pattern?.split("_") || "";
+  const patternRegex = `^${patternQuery[0]}`;
+  const patternSearchRegex = createRegex(patternQuery, patternRegex);
+
+  // Material Filter query, array, regex => filter multiply
+  const materialQuery = query.material?.split("_") || "";
+  const materialRegex = `^${materialQuery[0]}`;
+  const materialSearchRegex = createRegex(materialQuery, materialRegex);
+
+  // search query for mongoDb
   const search =
     searchQuery && searchQuery !== ""
       ? {
@@ -299,7 +315,7 @@ export async function getServerSideProps(context) {
     brandQuery && brandQuery !== ""
       ? {
         brand: {
-          $regex: styleRegex,
+          $regex: brandSearchRegex,
           $options: "i",
         },
       }
@@ -315,13 +331,68 @@ export async function getServerSideProps(context) {
       }
       : {};
 
+  const size =
+    sizeQuery && sizeQuery !== ""
+      ? {
+        "subProducts.sizes.size": {
+          $regex: sizeSearchRegex,
+          $options: "i",
+        },
+      }
+      : {};
+
+  const color =
+    colorQuery && colorQuery !== ""
+      ? {
+        "subProducts.color.color": {
+          $regex: colorSearchRegex,
+          $options: "i",
+        },
+      }
+      : {};
+
+  const pattern =
+    patternQuery && patternQuery !== ""
+      ? {
+        "details.value": {
+          $regex: patternSearchRegex,
+          $options: "i",
+        },
+      }
+      : {};
+
+  const material =
+    materialQuery && materialQuery !== ""
+      ? {
+        "details.value": {
+          $regex: materialSearchRegex,
+          $options: "i",
+        },
+      }
+      : {};
+
+  const gender =
+    genderQuery && genderQuery !== ""
+      ? {
+        "details.value": {
+          $regex: genderQuery,
+          $options: "i",
+        },
+      }
+      : {};
+
   // ====> Get data From Db <==== //
   db.connectDb();
   let productsDb = await Product.find({
     ...search,
     ...category,
     ...brand,
-    ...style
+    ...style,
+    ...size,
+    ...color,
+    ...pattern,
+    ...material,
+    ...gender,
   })
     .sort()
     .lean();

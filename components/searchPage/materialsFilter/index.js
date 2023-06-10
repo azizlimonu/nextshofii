@@ -7,6 +7,7 @@ import { BsPlusLg } from 'react-icons/bs';
 const MaterialsFilter = ({ materials, materialHandler, replaceQuery, }) => {
   const router = useRouter();
   const [show, setShow] = useState(true);
+  const existedMaterial = router.query.pattern || "";
 
   return (
     <div className={styles.filter}>
@@ -27,7 +28,7 @@ const MaterialsFilter = ({ materials, materialHandler, replaceQuery, }) => {
                   key={i}
                   htmlFor={material}
                   className={styles.filter__sizes_size}
-                  onClick={() => materialHandler(check.result)}
+                  onClick={() => materialHandler(existedMaterial ? `${existedMaterial}_${material}` : material)}
                 >
                   <input
                     type="checkbox"

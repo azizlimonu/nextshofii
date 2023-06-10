@@ -5,9 +5,11 @@ import { FaMinus } from 'react-icons/fa';
 import { BsPlusLg } from 'react-icons/bs';
 
 const GendersFilter = ({ genderHandler, replaceQuery }) => {
-
+  const router = useRouter();
   const genders = ["Men", "Women", "Unisex"];
   const [show, setShow] = useState(true);
+  const existedGender = router.query.gender || "";
+
   return (
     <div className={styles.filter}>
       <h3>
@@ -26,7 +28,7 @@ const GendersFilter = ({ genderHandler, replaceQuery }) => {
                 key={i}
                 htmlFor={gender}
                 className={styles.filter__sizes_size}
-                onClick={() => genderHandler(check.result)}
+                onClick={() => genderHandler(existedGender ? `${existedGender}_${gender}` : gender)}
               >
                 <input
                   type="checkbox"

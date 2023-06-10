@@ -28,7 +28,7 @@ const SizesFilter = ({ sizes, sizeHandler }) => {
                   sizeHandler(existedSize ? `${existedSize}_${size}` : size)
                 }
               >
-                <Size key={i} size={size} sizeHandler={sizeHandler} />
+                <Size key={i} size={size} />
               </div>
             ))}
           </div>
