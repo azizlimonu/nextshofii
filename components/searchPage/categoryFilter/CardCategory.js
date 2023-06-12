@@ -20,7 +20,7 @@ const CardCategory = ({
           type="radio"
           name="filter"
           id={category._id}
-          checked={check?.active}
+          checked={check.active}
         />
 
         <label htmlFor={category._id}>

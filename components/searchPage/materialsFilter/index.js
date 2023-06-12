@@ -21,14 +21,13 @@ const MaterialsFilter = ({ materials, materialHandler, replaceQuery, }) => {
         show && (
           <div className={styles.filter__sizes}>
             {materials?.map((material, i) => {
-              //  const check = replaceQuery("material", material);
-              const check = false
+              const check = replaceQuery("material", material);
               return (
                 <label
                   key={i}
                   htmlFor={material}
                   className={styles.filter__sizes_size}
-                  onClick={() => materialHandler(existedMaterial ? `${existedMaterial}_${material}` : material)}
+                  onClick={() => materialHandler(check.result)}
                 >
                   <input
                     type="checkbox"

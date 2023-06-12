@@ -21,13 +21,12 @@ const ColorsFilter = ({ colors, colorHandler, replaceQuery }) => {
         show && (
           <div className={styles.filter__colors}>
             {colors?.map((color, i) => {
-              // const check = replaceQuery("color", color);
-              const check = false
+              const check = replaceQuery("color", color);
               return (
                 <button
                   style={{ background: `${color}` }}
                   className={check.active ? styles.activeFilterColor : ""}
-                  onClick={() => colorHandler(existedColor ? `${existedColor}_${color}` : color)}
+                  onClick={() => colorHandler(check.result)}
                   key={i}
                 >
                 </button>

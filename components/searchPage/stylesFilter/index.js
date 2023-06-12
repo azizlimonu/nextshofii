@@ -27,13 +27,12 @@ const StylesFilter = ({
       {show && (
         <div className={styles.filter__sizes}>
           {data.map((style, i) => {
-            // const check = replaceQuery("style", style);
-            const check = false;
+            const check = replaceQuery("style", style);
             return (
               <div
                 key={i}
                 className={styles.filter__sizes_size}
-                onClick={() => styleHandler(existedStyle ?`${existedStyle}_${style}` : style)}
+                onClick={() => styleHandler(check.result)}
               >
                 <input
                   type="checkbox"

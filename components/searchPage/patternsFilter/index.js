@@ -22,14 +22,14 @@ const PatternsFilter = ({ patterns, patternHandler, replaceQuery, }) => {
       {show && (
         <div className={styles.filter__sizes}>
           {patterns.map((pattern, i) => {
-            // const check = replaceQuery("pattern", pattern);
-            const check = false;
+            const check = replaceQuery("pattern", pattern);
+            
             return (
               <label
                 key={i}
                 htmlFor={pattern}
                 className={styles.filter__sizes_size}
-                onClick={() => patternHandler(existedPattern ? `${existedPattern}_${pattern}` : pattern)}
+                onClick={() => patternHandler(check.result)}
               >
                 <input
                   type="checkbox"

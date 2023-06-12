@@ -20,7 +20,7 @@ import GendersFilter from '../components/searchPage/genderFilter';
 import MaterialsFilter from '../components/searchPage/materialsFilter';
 import HeadingFilters from '../components/searchPage/headingFilter';
 import Layout from '../components/layout/Layout';
-import { createRegex } from '../utils/regex';
+import { OldReplaceQuery,createRegex } from '../utils/regex';
 
 const SearchPage = ({
   categories,
@@ -111,21 +111,28 @@ const SearchPage = ({
       filter({ gender });
     }
   };
+
   const priceHandler = (price, type) => {
-
+    let priceQuery = router.query.price?.split("_") || "";
+    let min = priceQuery[0] || "";
+    let max = priceQuery[1] || "";
+    let newPrice = "";
+    if (type == "min") {
+      newPrice = `${price}_${max}`;
+    } else {
+      newPrice = `${min}_${price}`;
+    }
+    filter({ price: newPrice });
   };
-
-  const replaceQuery = (queryName, value) => {
-
+  
+  const multiPriceHandler = (min, max) => {
+    filter({ price: `${min}_${max}` });
   };
 
   const shippingHandler = (shipping) => {
 
   };
 
-  const multiPriceHandler = (min, max) => {
-
-  };
 
   const ratingHandler = (rating) => {
 
@@ -177,7 +184,7 @@ const SearchPage = ({
                 categories={categories}
                 subCategories={subCategories}
                 categoryHandler={categoryHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <SizesFilter sizes={sizes} sizeHandler={sizeHandler} />
@@ -185,36 +192,36 @@ const SearchPage = ({
               <ColorsFilter
                 colors={colors}
                 colorHandler={colorHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <BrandsFilter
                 brands={brands}
                 brandHandler={brandHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <StylesFilter
                 data={stylesData}
                 styleHandler={styleHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <PatternsFilter
                 patterns={patterns}
                 patternHandler={patternHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <MaterialsFilter
                 materials={materials}
                 materialHandler={materialHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
               <GendersFilter
                 genderHandler={genderHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
               />
 
 
@@ -228,7 +235,7 @@ const SearchPage = ({
                 multiPriceHandler={multiPriceHandler}
                 shippingHandler={shippingHandler}
                 ratingHandler={ratingHandler}
-                replaceQuery={replaceQuery}
+                replaceQuery={OldReplaceQuery}
                 sortHandler={sortHandler}
               />
 
@@ -381,6 +388,15 @@ export async function getServerSideProps(context) {
       }
       : {};
 
+  const price =
+    priceQuery && priceQuery !== ""
+      ? {
+        "subProducts.sizes.price": {
+          $gte: Number(priceQuery[0]) || 0,
+          $lte: Number(priceQuery[1]) || Infinity,
+        },
+      }
+      : {};
   // ====> Get data From Db <==== //
   db.connectDb();
   let productsDb = await Product.find({
@@ -393,6 +409,7 @@ export async function getServerSideProps(context) {
     ...pattern,
     ...material,
     ...gender,
+    ...price,
   })
     .sort()
     .lean();

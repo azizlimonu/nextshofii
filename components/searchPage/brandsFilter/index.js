@@ -26,14 +26,13 @@ const BrandsFilter = ({
       {show && (
         <div className={styles.filter__sizes}>
           {brands.map((brand, i) => {
-            // const check = replaceQuery("brand", brand);
-            const check = false;
+            const check = replaceQuery("brand", brand);
             return (
               <div
                 key={i}
                 className={`${styles.filter__brand} ${check.active ? styles.activeFilter : ""
                   }`}
-                onClick={() => brandHandler(brand)}
+                onClick={() => brandHandler(check.result)}
               >
                 <img src={`/images/brands/${brand}.png`} alt="" />
               </div>
