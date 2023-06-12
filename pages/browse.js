@@ -5,6 +5,7 @@ import Product from '../models/ProductModel';
 import Category from '../models/CategoryModel';
 import SubCategory from '../models/SubCategoryModel';
 import { filterArray, randomize, removeDuplicates } from '../utils/arrayUtils';
+import { OldReplaceQuery, createRegex, ReplaceQuery } from '../utils/regex';
 
 import Link from 'next/link';
 import { useRouter } from "next/router";
@@ -20,7 +21,6 @@ import GendersFilter from '../components/searchPage/genderFilter';
 import MaterialsFilter from '../components/searchPage/materialsFilter';
 import HeadingFilters from '../components/searchPage/headingFilter';
 import Layout from '../components/layout/Layout';
-import { OldReplaceQuery, createRegex, ReplaceQuery } from '../utils/regex';
 
 const SearchPage = ({
   categories,
@@ -75,6 +75,14 @@ const SearchPage = ({
       query: query,
     });
   };
+
+  const searchHandler = (search) => {
+    if (search == "") {
+      filter({ search: {} });
+    } else {
+      filter({ search });
+    }
+  }
 
   const categoryHandler = (category) => {
     filter({ category });
@@ -133,7 +141,6 @@ const SearchPage = ({
     filter({ shipping });
   };
 
-
   const ratingHandler = (rating) => {
     filter({ rating });
   };
@@ -146,21 +153,16 @@ const SearchPage = ({
     }
   };
 
-  const checkChecked = (sort) => {
-
+  const isQueryChecked = (sort) => {
+    if (router.query[queryName]?.search(value) !== -1) {
+      return true;
+    }
+    return false;
   };
 
   const pageHandler = (e, page) => {
 
   };
-
-  const searchHandler = (search) => {
-    if (search == "") {
-      filter({ search: {} });
-    } else {
-      filter({ search });
-    }
-  }
 
   return (
     <div className={styles.browse}>
@@ -401,6 +403,40 @@ export async function getServerSideProps(context) {
         },
       }
       : {};
+
+  const shipping =
+    shippingQuery && shippingQuery == "0"
+      ? {
+        shipping: 0,
+      }
+      : {};
+
+  const rating =
+    ratingQuery && ratingQuery !== ""
+      ? {
+        rating: {
+          $gte: Number(ratingQuery),
+        },
+      }
+      : {};
+
+  const sort =
+    sortQuery == ""
+      ? {}
+      : sortQuery == "popular"
+        ? { rating: -1, "subProducts.sold": -1 }
+        : sortQuery == "newest"
+          ? { createdAt: -1 }
+          : sortQuery == "topSelling"
+            ? { "subProducts.sold": -1 }
+            : sortQuery == "topReviewed"
+              ? { rating: -1 }
+              : sortQuery == "priceHighToLow"
+                ? { "subProducts.sizes.price": -1 }
+                : sortQuery == "priceLowToHigh"
+                  ? { "subProducts.sizes.price": 1 }
+                  : {};
+
   // ====> Get data From Db <==== //
   db.connectDb();
   let productsDb = await Product.find({
@@ -414,8 +450,10 @@ export async function getServerSideProps(context) {
     ...material,
     ...gender,
     ...price,
+    ...shipping,
+    ...rating,
   })
-    .sort()
+    .sort(sort)
     .lean();
 
   let categories = await Category.find().lean();
