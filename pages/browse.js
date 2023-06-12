@@ -20,7 +20,7 @@ import GendersFilter from '../components/searchPage/genderFilter';
 import MaterialsFilter from '../components/searchPage/materialsFilter';
 import HeadingFilters from '../components/searchPage/headingFilter';
 import Layout from '../components/layout/Layout';
-import { OldReplaceQuery,createRegex } from '../utils/regex';
+import { OldReplaceQuery, createRegex, ReplaceQuery } from '../utils/regex';
 
 const SearchPage = ({
   categories,
@@ -124,22 +124,26 @@ const SearchPage = ({
     }
     filter({ price: newPrice });
   };
-  
+
   const multiPriceHandler = (min, max) => {
     filter({ price: `${min}_${max}` });
   };
 
   const shippingHandler = (shipping) => {
-
+    filter({ shipping });
   };
 
 
   const ratingHandler = (rating) => {
-
+    filter({ rating });
   };
 
   const sortHandler = (sort) => {
-
+    if (sort == "") {
+      filter({ sort: {} });
+    } else {
+      filter({ sort });
+    }
   };
 
   const checkChecked = (sort) => {

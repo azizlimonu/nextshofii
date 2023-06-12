@@ -40,13 +40,13 @@ export const OldReplaceQuery = (queryName, value) => {
       // Set the result as an empty object
       result = {};
     } else {
-      // If the provided value is found within the existing query value
+      // If the value query is exist
       if (valueCheck !== -1) {
         // If the search value is found within the existing query value
         if (_check !== -1) {
           // Remove the search value from the existing query value
           result = existedQuery?.replace(`_${value}`, '');
-          // If the provided value is at the beginning of the existing query value
+        // If the provided value is at the beginning of the existing query value
         } else if (valueCheck == 0) {
           // Remove the provided value from the existing query value
           result = existedQuery?.replace(`${value}_`, '');
@@ -65,11 +65,14 @@ export const OldReplaceQuery = (queryName, value) => {
   }
 
   return {
-    result,  // The modified query parameter value
-    active: existedQuery && valueCheck !== -1 ? true : false,  // Check if the existing query value is truthy and the provided value is found within it
+    // The modified query parameter value
+    result,
+    // Check if the existing query value is truthy and the provided value is found within it
+    active: existedQuery && valueCheck !== -1 ? true : false,
   };
 };
 
+// this function not working properly
 export const ReplaceQuery = (queryName, value) => {
   const router = useRouter();
   // Get the existing query parameter value or use an empty string if it doesn't exist

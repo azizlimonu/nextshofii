@@ -21,14 +21,13 @@ const GendersFilter = ({ genderHandler, replaceQuery }) => {
       {show && (
         <div className={styles.filter__sizes}>
           {genders.map((gender, i) => {
-            // const check = replaceQuery("gender", gender);
-            const check = false;
+            const check = replaceQuery("gender", gender);
             return (
               <label
                 key={i}
                 htmlFor={gender}
                 className={styles.filter__sizes_size}
-                onClick={() => genderHandler(existedGender ? `${existedGender}_${gender}` : gender)}
+                onClick={() => genderHandler(check.result)}
               >
                 <input
                   type="checkbox"
