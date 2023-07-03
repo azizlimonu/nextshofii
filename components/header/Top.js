@@ -52,21 +52,17 @@ export const Top = ({ country }) => {
             onMouseLeave={() => setVisible(false)}
           >
             {session ? (
-              <li className={styles.li}>
-                <div className={styles.flex}>
-                  <img src={session?.user?.image} alt="" />
-                  <span>{session?.user?.name}</span>
-                  <RiArrowDropDownFill />
-                </div>
-              </li>
+              <div className={styles.flex}>
+                <img src={session?.user?.image} alt="" />
+                <span>{session?.user?.name}</span>
+                <RiArrowDropDownFill />
+              </div>
             ) : (
-              <li className={styles.li}>
-                <div className={styles.flex}>
-                  <RiAccountCircleFill />
-                  <span>Account</span>
-                  <RiArrowDropDownFill />
-                </div>
-              </li>
+              <div className={styles.flex}>
+                <RiAccountCircleFill />
+                <span>Account</span>
+                <RiArrowDropDownFill />
+              </div>
             )}
             {visible && <UserMenu session={session} />}
           </li>

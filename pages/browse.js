@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from '../styles/search.module.scss';
 import db from '../utils/db';
 import Product from '../models/ProductModel';
@@ -9,6 +8,7 @@ import { OldReplaceQuery, createRegex, ReplaceQuery } from '../utils/regex';
 
 import Link from 'next/link';
 import { useRouter } from "next/router";
+import { Pagination } from '@mui/material';
 
 import ProductCard from '../components/productCard';
 import CategoryFilter from '../components/searchPage/categoryFilter';
@@ -32,6 +32,7 @@ const SearchPage = ({
   stylesData,
   patterns,
   materials,
+  paginationCount,
 }) => {
   const router = useRouter();
 
@@ -161,7 +162,7 @@ const SearchPage = ({
   };
 
   const pageHandler = (e, page) => {
-
+    filter({ page });
   };
 
   return (
@@ -252,7 +253,13 @@ const SearchPage = ({
               </div>
 
               <div className={styles.pagination}>
-                {/* Pagination */}
+                <Pagination
+                  count={paginationCount}
+                  defaultPage={Number(router.query.page) || 1}
+                  onChange={pageHandler}
+                  variant="outlined"
+                  color="primary"
+                />
               </div>
             </div>
           </div>
@@ -274,8 +281,8 @@ export async function getServerSideProps(context) {
   const shippingQuery = query.shipping || 0;
   const ratingQuery = query.rating || "";
   const sortQuery = query.sort || "";
-  const pageSize = 50;
   const page = query.page || 1;
+  const pageSize = 15;
 
   // Multiple Query
   // Brand Filter query, array, regex => filter multiply
@@ -453,6 +460,8 @@ export async function getServerSideProps(context) {
     ...shipping,
     ...rating,
   })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize)
     .sort(sort)
     .lean();
 
@@ -488,7 +497,6 @@ export async function getServerSideProps(context) {
   let materials = removeDuplicates(materialsDb);
   let brands = removeDuplicates(brandsDb);
 
-
   db.disconnectDb();
   // ====>
 
@@ -503,6 +511,7 @@ export async function getServerSideProps(context) {
       stylesData: styles,
       patterns,
       materials,
+      paginationCount: Math.ceil(totalProducts / pageSize),
     }
   };
 };

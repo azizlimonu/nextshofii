@@ -8,6 +8,12 @@ const NewsLetter = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const subscribe = () => {
+    setLoading(true);
+    setSuccess("Thank You, you will get any information about Us");
+    setLoading(false);
+  };
+
   return (
     <div className={styles.footer__newsletter}>
       <h3>Sign Up For Our NewsLetter</h3>
@@ -24,7 +30,7 @@ const NewsLetter = () => {
           className={styles.btn_primary}
           disabled={loading === true}
           style={{ cursor: `${loading ? "not-allowed" : ""}` }}
-          onClick={() => console.log("Subscribed")}
+          onClick={() => subscribe()}
         >
           Subscribe
         </button>

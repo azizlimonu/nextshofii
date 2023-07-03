@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
               <img
                 key={i}
                 src={item.image}
-                className={i == active && styles.active}
+                className={i === active ? styles.active : ''}
                 onMouseOver={() => {
                   setImages(product.subProducts[i].images);
                   setActive(i);

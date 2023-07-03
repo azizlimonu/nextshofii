@@ -31,7 +31,7 @@ const MainSwiper = () => {
         {[...Array(10).keys()].map((_, i) => (
           <SwiperSlide key={i}>
             <Image
-              width={899}
+              width={880}
               height={300}
               src={`/images/swiper/${i+1}.jpg`}
               alt={i}

@@ -7,8 +7,6 @@ import styles from './header.module.scss';
 const Ads = () => {
   return (
     <Link href='/'>
-      <div className={styles.ads}>
-      </div>
     </Link>
   )
 }
