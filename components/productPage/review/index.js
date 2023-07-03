@@ -10,9 +10,11 @@ const Reviews = ({ product }) => {
   const { data: session } = useSession();
   const [rating, setRating] = useState("");
   const [reviews, setReviews] = useState(product.reviews);
-
-  // console.log(reviews);
-
+  // console.log(typeof(product.ratings[0]));
+  // console.log(product.ratings);
+  // console.log(product);
+  // // console.log(reviews);
+  // console.log(product.rating, "rating")
   return (
     <div className={styles.reviews}>
       <div className={styles.reviews__container}>
@@ -46,13 +48,26 @@ const Reviews = ({ product }) => {
                   readOnly
                   style={{ color: "#FACF19" }}
                 />
-                <div className={styles.bar}>
-                  <div
-                    className={styles.bar__inner}
-                    style={{ width: `${rating.percentage}%` }}
-                  ></div>
-                </div>
-                <span>{rating.percentage}%</span>
+                {rating.percentage !== "NaN" ? (
+                  <>
+                    <div className={styles.bar}>
+                      <div
+                        className={styles.bar__inner}
+                        style={{ width: `${rating.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span>{rating.percentage}%</span>
+                  </>
+                ): (
+                    <>
+                      <div className={styles.bar}>
+                        <div
+                          className={styles.bar__inner}
+                        ></div>
+                      </div>
+                      <span>0</span>
+                    </>
+                )}
               </div>
             ))}
           </div>

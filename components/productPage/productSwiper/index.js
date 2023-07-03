@@ -17,16 +17,17 @@ const ProductSwiper = ({ images, activeImage }) => {
               alt: "",
               isFluidWidth: true,
               src: activeImage || images[active].url,
+              sizes: '(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px',
             },
             largeImage: {
               src: activeImage || images[active].url,
-              width: 1500,
-              height: 2000,
+              width: 1200,
+              height: 1800
             },
             enlargedImageContainerDimensions: {
-              width: "200%",
-              height: "100%",
-            },
+              width: '200%',
+              height: '100%'
+            }
           }}
         />
       </div>
