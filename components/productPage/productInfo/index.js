@@ -291,7 +291,7 @@ const ProductInfo = ({ product, setActiveImage }) => {
         <Accordian
           details={[product.description, ...product.details]}
         />
-        <RelatedProduct />
+        {/* <RelatedProduct /> */}
       </div>
     </div>
   )

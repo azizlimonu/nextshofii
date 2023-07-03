@@ -166,17 +166,17 @@
   }
   &__accordian {
     margin-top: 1rem;
-    max-width: 400px;
+    // max-width: 400px;
     &_grid {
       display: flex;
-      justify-content: space-between;
+      // justify-content: space-between;
       color: #666;
       font-weight: normal;
       span {
         display: flex;
         gap: 2px;
         &:last-of-type {
-          width: 180px;
+          // width: 180px;
         }
         p {
           text-transform: capitalize;
