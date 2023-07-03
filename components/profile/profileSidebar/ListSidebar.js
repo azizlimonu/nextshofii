@@ -21,45 +21,45 @@ const ListSidebar = ({ item, visible, index }) => {
       )}
       {show && (
         <ul>
-          {item.links?.map((link, i) => (
-            <>
-              {link.link.startsWith("/profile/orders") ? (
-                <li
-                  className={
-                    (router.query.q?.split("__")[0] || "") ==
-                      slugify(link.name, { lower: true })
-                      ? styles.active
-                      : ""
-                  }
+          {item.links?.map((link, i) =>
+            link.link.startsWith("/profile/orders") ? (
+              <li
+                className={
+                  (router.query.q?.split("__")[0] || "") ==
+                    slugify(link.name, { lower: true })
+                    ? styles.active
+                    : ""
+                }
+                key={i}
+              >
+                <Link
+                  href={`${link.link}?tab=${index}&q=${slugify(link.name, {
+                    lower: true,
+                  })}__${link.filter}`}
                 >
-                  <Link
-                    href={`${link.link}?tab=${index}&q=${slugify(link.name, {
-                      lower: true,
-                    })}__${link.filter}`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ) : (
-                <li
-                  className={
-                    (router.query.q || "") ==
-                      slugify(link.name, { lower: true })
-                      ? styles.active
-                      : ""
-                  }
+                  {link.name}
+                </Link>
+              </li>
+            ) : (
+              <li
+                className={
+                  (router.query.q || "") ==
+                    slugify(link.name, { lower: true })
+                    ? styles.active
+                    : ""
+                }
+                key={i}
+              >
+                <Link
+                  href={`${link.link}?tab=${index}&q=${slugify(link.name, {
+                    lower: true,
+                  })}`}
                 >
-                  <Link
-                    href={`${link.link}?tab=${index}&q=${slugify(link.name, {
-                      lower: true,
-                    })}`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              )}
-            </>
-          ))}
+                  {link.name}
+                </Link>
+              </li>
+            )
+          )}
         </ul>
       )}
     </li>

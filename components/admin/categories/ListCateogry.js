@@ -11,7 +11,6 @@ const ListCateogry = ({ category, setCategories }) => {
 
   const handleRemove = async (id) => {
     try {
-      console.log("remove", id);
       const { data } = await axios.delete(`/api/admin/category/${id}`);
       setCategories(data.categories);
       toast.success(data.message);
@@ -27,9 +26,10 @@ const ListCateogry = ({ category, setCategories }) => {
       const { data } = await axios.put('/api/admin/category', {
         id, name
       });
+      console.log("DATA UPDATED", data);
       setCategories(data.categories);
-      setOpen(false);
       toast.success(data.message);
+      setOpen(false);
     } catch (error) {
       toast.error(error);
       console.log(error);

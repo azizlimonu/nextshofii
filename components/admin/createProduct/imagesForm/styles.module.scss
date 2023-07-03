@@ -4,7 +4,7 @@
   &__main {
     &_grid {
       max-width: 600px;
-      max-height: 550px;
+      max-height: 700px;
       display: grid;
       img {
         width: 100%;
@@ -70,7 +70,7 @@
     }
   }
   &__noImages {
-    max-height: 350px !important;
+    max-height: 350px;
   }
 }
 /*--------------------GRID IMAGES-----------------------*/

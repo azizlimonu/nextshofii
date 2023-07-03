@@ -5,6 +5,7 @@ import Menu from './Menu';
 import MainSwiper from './MainSwiper';
 import Offers from './Offers';
 import User from './User';
+import Ads from './Ads';
 
 const Main = () => {
   return (
@@ -13,7 +14,8 @@ const Main = () => {
       <Menu />
       <MainSwiper />
       <Offers />
-      <User />
+      {/* <User /> */}
+      <Ads />
     </div>
   )
 }

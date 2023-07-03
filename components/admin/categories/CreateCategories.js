@@ -21,11 +21,9 @@ const CreateCategories = ({ setCategories }) => {
 
   const submitHandler = async () => {
     try {
-      console.log("submitted");
       const { data } = await axios.post('/api/admin/category', { name });
       setCategories(data.categories);
       setName("");
-      console.log(name);
       toast.success(data.message);
     } catch (error) {
       toast.error(error);

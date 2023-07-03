@@ -497,6 +497,21 @@ export async function getServerSideProps(context) {
   let materials = removeDuplicates(materialsDb);
   let brands = removeDuplicates(brandsDb);
 
+  let totalProducts= await Product.countDocuments({
+    ...search,
+    ...category,
+    ...brand,
+    ...style,
+    ...size,
+    ...color,
+    ...pattern,
+    ...material,
+    ...gender,
+    ...price,
+    ...shipping,
+    ...rating,
+  });
+
   db.disconnectDb();
   // ====>
 

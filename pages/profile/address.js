@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Head from 'next/head';
 import { getSession } from "next-auth/react";
 import ProfileLayout from '../../components/profile/profileLayout';
 import CheckoutShipping from '../../components/checkoutPage/shipping';
@@ -11,10 +10,6 @@ const ProfileAddress = ({ user, tab }) => {
 
   return (
     <ProfileLayout session={user.user} tab={tab}>
-      <Head>
-        <title>Profile - Address</title>
-      </Head>
-
       <div className={styles.header}>
         <h1>MY ADDRESSES</h1>
       </div>

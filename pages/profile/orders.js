@@ -65,8 +65,8 @@ const ProfileOrders = ({ user, tab, orders }) => {
           </thead>
 
           <tbody>
-            {orders?.map((order) => (
-              <tr key={order._id}>
+            {orders?.map((order,idx) => (
+              <tr key={order._id || idx}>
                 <td>{order._id}</td>
 
                 <td className={styles.orders__images}>
@@ -78,8 +78,8 @@ const ProfileOrders = ({ user, tab, orders }) => {
                       <p>...</p>
                     </>
                   ) : (
-                    order.products.map((p) => (
-                      <img src={p.image} key={p._id} alt="" />
+                    order.products.map((p,i) => (
+                      <img src={p.image} key={i} alt="" />
                     ))
                   )}
                 </td> 

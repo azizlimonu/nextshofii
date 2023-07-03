@@ -103,8 +103,8 @@ const Sidebar = () => {
           </div>
 
           <ul className={styles.sidebar__list}>
-            <li className={route == "product/all" ? styles.active : ""}>
-              <Link href="/admin/dashboard/product/all">
+            <li className={route == "product/allProducts" ? styles.active : ""}>
+              <Link href="/admin/dashboard/allProducts">
                 <FaThList />
                 <span className={styles.show}>All Products</span>
               </Link>

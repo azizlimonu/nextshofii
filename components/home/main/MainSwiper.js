@@ -12,34 +12,32 @@ import { Autoplay, Pagination, Navigation } from "swiper";
 
 const MainSwiper = () => {
   return (
-    <>
-      <Swiper
-        slidesPerView={1}
-        spaceBetween={30}
-        loop={true}
-        pagination={{
-          clickable: true,
-        }}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
-        navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
-        className="mainSwiper"
-      >
-        {[...Array(10).keys()].map((_, i) => (
-          <SwiperSlide key={i}>
-            <Image
-              width={880}
-              height={300}
-              src={`/images/swiper/${i+1}.jpg`}
-              alt={i}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
+    <Swiper
+      slidesPerView={1}
+      spaceBetween={30}
+      loop={true}
+      pagination={{
+        clickable: true,
+      }}
+      autoplay={{
+        delay: 2000,
+        disableOnInteraction: false,
+      }}
+      navigation={true}
+      modules={[Autoplay, Pagination, Navigation]}
+      className="mainSwiper"
+    >
+      {[...Array(10).keys()].map((_, i) => (
+        <SwiperSlide key={i}>
+          <Image
+            width={880}
+            height={300}
+            src={`/images/swiper/${i + 1}.jpg`}
+            alt={i}
+          />
+        </SwiperSlide>
+      ))}
+    </Swiper>
   )
 }
 

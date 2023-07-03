@@ -19,7 +19,6 @@ import ProductCard from '../components/productCard';
 import Layout from '../components/layout/Layout';
 
 export default function Home({ products }) {
-  console.log(products);
 
   const isMedium = useMediaQuery({ query: "(max-width:850px)" });
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });

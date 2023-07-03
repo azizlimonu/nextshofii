@@ -45,7 +45,10 @@ handler.put(async (req, res) => {
       db.disconnectDb();
       return res
         .status(200)
-        .json({ message: "Category updated now" });
+        .json({ 
+          message: "Category updated now" ,
+          categories: await Category.find({}).sort({ createdAt: -1 }),
+        });
     }
 
     db.disconnectDb();

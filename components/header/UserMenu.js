@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { signOut, signIn } from "next-auth/react";
 
 const UserMenu = ({ session }) => {
+  console.log(session);
+
   return (
     <div className={styles.menu}>
       {session ? (
@@ -13,13 +15,13 @@ const UserMenu = ({ session }) => {
           <div className={styles.col}>
             <span>Welcome Back,</span>
             <h3>{session?.user?.name}</h3>
-            <span onClick={()=>signOut()} >Sign Out</span>
+            <span onClick={() => signOut()} >Sign Out</span>
           </div>
         </div>
       ) : (
         <div className={styles.flex}>
           <button className={styles.btn_primary}>Register</button>
-          <button className={styles.btn_outlined} onClick={()=>(signIn())}>
+          <button className={styles.btn_outlined} onClick={() => (signIn())}>
             Login
           </button>
         </div>
@@ -31,17 +33,22 @@ const UserMenu = ({ session }) => {
           <Link href="/profile">Account</Link>
         </li>
         <li>
-          <Link href="/profile/orders">My Orders</Link>
+          <Link href="/profile/orders?tab=1&q=all-orders__">My Orders</Link>
         </li>
         <li>
           <Link href="/profile/messages">Message Center</Link>
         </li>
         <li>
-          <Link href="/profile/address">Address</Link>
+          <Link href="/profile/address?tab=0&q=addresses">Address</Link>
         </li>
         <li>
-          <Link href="/profile/whishlist">Whishlist</Link>
+          <Link href="/whishlist">Whishlist</Link>
         </li>
+        {session.user.role === "admin" && (
+          <li>
+            <Link href="/admin/dashboard">Admin Dashboard</Link>
+          </li>
+        )}
       </ul>
     </div>
   )
